@@ -1,6 +1,6 @@
 #!/bin/sh
-sudo apt-get install -Y openjdk-7-jdk
-sudo apt-get install -Y maven=3.0.4-2
+sudo apt-get install -y openjdk-7-jdk
+sudo apt-get install -y maven=3.0.4-2
 
 sudo apt-get remove scala-library scala
 wget www.scala-lang.org/files/archive/scala-2.10.3.deb
