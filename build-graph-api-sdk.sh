@@ -9,6 +9,12 @@ cd generated-code/android-java/
 
 mv src/main/java/pom.xml .
 
+#Process the generated code so that it is Java Compliant
+cd src/main/java/com/wordnik/client/model
+ls | awk '{system("mv " $0 " " toupper(substr($0,1,1)) substr($0,2))}'
+cd ../../../../../../../
+perl -pi -e 's/-//g' src/main/java/com/wordnik/client/api/VApi.java
+
 mvn package
 
 cp target/android-client-1.0.0.jar ../../../openi-framework-android-sdk-1.0.0.jar
