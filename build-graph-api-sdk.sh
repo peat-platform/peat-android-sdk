@@ -17,5 +17,5 @@ perl -pi -e 's/-//g' src/main/java/com/wordnik/client/api/VApi.java
 
 mvn package
 
-cp target/android-client-1.0.0.jar ../../../openi-framework-android-sdk-1.0.0.jar
+cp target/android-client-1.0.0.jar ../../../openi-graph-api-android-sdk-1.0.0.jar
 
