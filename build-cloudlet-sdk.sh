@@ -7,6 +7,9 @@ scala -cp Target/scala-2.10/swagger-codegen.jar -DskipErrors=true com.wordnik.sw
 
 cd generated-code/android-java/
 
+mv src/main/java/com/ src/main/java/eu
+mv src/main/java/eu/wordnik/ src/main/java/eu/openi
+
 mv src/main/java/pom.xml .
 
 mvn package
