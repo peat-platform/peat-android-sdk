@@ -3,7 +3,7 @@ cd swagger-codegen
 
 rm -fr generated-code/android-java
 
-scala -cp Target/scala-2.10/swagger-codegen.jar -DskipErrors=true com.wordnik.swagger.codegen.BasicAndroidJavaClient http://$1/api-spec/v1/cloudlet
+scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true com.wordnik.swagger.codegen.BasicAndroidJavaClient http://$1/api-spec/v1/cloudlet
 
 cd generated-code/android-java/
 

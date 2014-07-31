@@ -21,6 +21,6 @@ git clone https://github.com/wordnik/swagger-codegen.git
 
 cd swagger-codegen
 
-./Sbt assembly
+./sbt assembly
 
 mkdir -p generated-code/android-java/src/main/java
