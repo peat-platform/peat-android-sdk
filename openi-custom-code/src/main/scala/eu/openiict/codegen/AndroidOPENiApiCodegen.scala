@@ -1,4 +1,4 @@
-package eu.openict.codegen
+package eu.openiict.codegen
 
 import com.wordnik.swagger.codegen.BasicAndroidJavaGenerator
 
@@ -12,6 +12,11 @@ object AndroidOPENiApiCodegen extends BasicAndroidJavaGenerator {
 
   // where to write generated code
   override def destinationDir = destinationRoot + "/src/main/java"
+
+  override def importMapping = super.importMapping ++ Map(
+    "Set" -> "java.util.Set",
+    "Map" -> "java.util.Map",
+    "JSON" -> "java.util.Map")
 
   // package for api invoker, error files
   override def invokerPackage = Some("eu.openiict.client.common")

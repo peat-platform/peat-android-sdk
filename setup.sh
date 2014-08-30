@@ -19,8 +19,7 @@ rm -fr sbt.deb  scala-2.10.3.deb
 
 git clone https://github.com/wordnik/swagger-codegen.git
 
-mkdir -p swagger-codegen/src/main/scala/eu/openiict/codegen
-cp openi-custom-code/AndroidOPENiApiCodegen.scala swagger-codegen/src/main/scala/eu/openiict/codegen 
+cp -r openi-custom-code/* swagger-codegen/
 
 cd swagger-codegen
 

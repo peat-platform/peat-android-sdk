@@ -1,0 +1,43 @@
+package {{package}};
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+{{#imports}}import {{import}};
+{{/imports}}
+{{#models}}
+{{#model}}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class {{classname}} {
+  {{#vars}}
+
+  {{#description}}/* {{{description}}} */
+  {{/description}}
+  @JsonProperty("{{baseName}}")
+  private {{{datatype}}} {{nameJava}} = {{{defaultValue}}};
+  {{/vars}}
+  
+  {{#vars}}
+  public {{{datatype}}} {{javagetter}}() {
+    return {{nameJava}};
+  }
+  public void {{javasetter}}({{{datatype}}} {{nameJava}}) {
+    this.{{nameJava}} = {{nameJava}};
+  }
+
+  {{/vars}}
+
+  @Override
+  public String toString()  {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class {{classname}} {\n");
+    {{#vars}}
+    sb.append("  {{name}}: ").append({{nameJava}}).append("\n");
+    {{/vars}}
+    sb.append("}\n");
+    return sb.toString();
+  }
+}
+{{/model}}
+{{/models}}
