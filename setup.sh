@@ -25,4 +25,6 @@ cd swagger-codegen
 
 ./sbt assembly
 
+mv target/scala-2.10/swagger-codegen*.jar target/scala-2.10/swagger-codegen.jar
+
 mkdir -p generated-code/android-java/src/main/java
