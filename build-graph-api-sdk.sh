@@ -3,7 +3,7 @@ cd swagger-codegen
 
 rm -fr generated-code/android-java
 
-scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen https://$1/api-spec/v1/api_framework
+scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen http://$1/api-spec/v1/api_framework
 
 cd generated-code/android-java/
 
