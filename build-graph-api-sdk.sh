@@ -10,7 +10,7 @@ scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.co
 sed -i 's/import eu.openiict.client.model.Datetime;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/import eu.openiict.client.model.Integer;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/import eu.openiict.client.model.Object;//' generated-code/android-java/src/main/java/eu/openiict/client/api/*
-sed -i 's/import eu.openiict.client.model.Related;/import java.util.Map;/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/import eu.openiict.client.model.Related;/import eu.openiict.client.model.Context;/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/Related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/datetime/String/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
