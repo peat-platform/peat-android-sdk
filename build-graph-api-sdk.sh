@@ -11,8 +11,8 @@ sed -i 's/import eu.openiict.client.model.Datetime;//' generated-code/android-ja
 sed -i 's/import eu.openiict.client.model.Integer;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/import eu.openiict.client.model.Object;//' generated-code/android-java/src/main/java/eu/openiict/client/api/*
 sed -i 's/import eu.openiict.client.model.Related;/import java.util.Map;/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
-sed -i 's/related/Map/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
-sed -i 's/Related/Map/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/Related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/datetime/String/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 
 cd generated-code/android-java/
