@@ -8,14 +8,12 @@ scala -cp  target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.c
 sed -i 's/import eu.openiict.client.model.Datetime;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/import eu.openiict.client.model.Integer;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/import eu.openiict.client.model.Object;//' generated-code/android-java/src/main/java/eu/openiict/client/api/*
-sed -i 's/import eu.openiict.client.model.Related;/import java.util.Map;/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
-sed -i 's/related/Map/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
-sed -i 's/Related/Map/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/import eu.openiict.client.model.Related;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/related/Object/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/Related/Object/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/datetime/String/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 
 cd generated-code/android-java/
-
-cp ../../../openi-custom-code/OPENiObject.java src/main/java/eu/openiict/client/model/
 
 sed -i 's/<httpclient-version>4.0/<httpclient-version>4.3.2/' pom.xml
 
