@@ -7,9 +7,7 @@ scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.co
 
 cd generated-code/android-java/
 
-#cp ../../../openi-custom-code/OPENiObject.java src/main/java/eu/openiict/client/model/
-
-sed -i 's/<httpclient-version>4.0/<httpclient-version>4.3.2/' pom.xml
+cp -r ../../../openi-custom-code/src/main/java src/main/
 
 mvn package
 

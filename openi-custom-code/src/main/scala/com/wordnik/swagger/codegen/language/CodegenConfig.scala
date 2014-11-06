@@ -127,7 +127,7 @@ abstract class CodegenConfig {
     }
     base + {
       if (name.length > 0) {
-         camelify(name.replaceAll("^_|[@*#]", ""))
+         camelify(name.replaceAll("^_|[@*#]", "")).replaceAll("-", "")
       }
       else ""
     }
@@ -151,7 +151,7 @@ abstract class CodegenConfig {
     }
     base + {
       if (name.length > 0) {
-         camelify(name.replaceAll("^_|[@*#]", ""))
+         camelify(name.replaceAll("^_|[@*#]", "")).replaceAll("-", "")
       }
       else ""
     }

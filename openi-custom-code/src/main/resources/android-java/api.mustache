@@ -1,0 +1,124 @@
+package {{package}};
+
+import {{invokerPackage}}.ApiException;
+import {{invokerPackage}}.ApiInvoker;
+{{#imports}}import {{import}};
+{{/imports}}
+
+import java.util.*;
+import java.io.File;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import eu.medsea.mimeutil.detector.MagicMimeMimeDetector;
+import eu.medsea.mimeutil.detector.MimeDetector;
+
+{{#operations}}
+public class {{classname}} {
+  String basePath = "{{basePath}}";
+  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+
+  public void addHeader(String key, String value) {
+    getInvoker().addDefaultHeader(key, value);
+  }
+
+  public ApiInvoker getInvoker() {
+    return apiInvoker;
+  }
+
+  public void setBasePath(String basePath) {
+    this.basePath = basePath;
+  }
+
+  public String getBasePath() {
+    return basePath;
+  }
+
+  private String getMimeType(File file){
+    MimeDetector md        = new MagicMimeMimeDetector();
+    Collection   mimeTypes =  md.getMimeTypes( file );
+
+    return (mimeTypes.isEmpty()) ? "application/octet-stream" : mimeTypes.iterator().next().toString();
+  }
+
+  {{#operation}}
+  {{#errorList}} //error info- code: {{code}} reason: "{{reason}}" model: {{#responseModel}}{{responseModel}}
+  {{/responseModel}}{{^responseModel}}<none>
+  {{/responseModel}}
+  {{/errorList}}
+  public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}} {{nickname}} ({{#allParams}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) throws ApiException {
+    {{#requiredParamCount}}
+    // verify required params are set
+    if({{/requiredParamCount}}{{#requiredParams}} {{paramName}} == null {{#hasMore}}|| {{/hasMore}}{{/requiredParams}}{{#requiredParamCount}}) {
+       throw new ApiException(400, "missing required params");
+    }
+    {{/requiredParamCount}}
+
+    // create path and map variables
+    String path = "{{path}}".replaceAll("\\{format\\}","json"){{#pathParams}}.replaceAll("\\{" + "{{paramName}}" + "\\}", apiInvoker.escapeString({{{paramName}}}.toString())){{/pathParams}};
+
+    String[] contentTypes = {
+      {{#consumes}}"{{mediaType}}"{{#hasMore}},{{/hasMore}}{{/consumes}}
+    };
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    // query params
+    Map<String, String>    queryParams  = new HashMap<String, String>();
+    Map<String, String>    headerParams = new HashMap<String, String>();
+    HttpEntity             httpEntity   = null;
+
+    {{#queryParams}}if(!"null".equals(String.valueOf({{paramName}})))
+      queryParams.put("{{baseName}}", String.valueOf({{paramName}}));
+    {{/queryParams}}
+
+    {{#headerParams}}headerParams.put("{{baseName}}", {{paramName}});
+    {{/headerParams}}
+
+     if(contentType.startsWith("multipart/form-data")) {
+        boolean hasFields = false;
+        MultipartEntityBuilder meBuilder = MultipartEntityBuilder.create();
+        meBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+        {{#formParams}}
+        {{#notFile}}
+        if (null != {{paramName}}){
+          hasFields = true;
+          meBuilder.addTextBody( "{{baseName}}", {{paramName}});
+        }
+        {{/notFile}}
+        {{#isFile}}
+        if (null != {{paramName}}){
+          hasFields = true;
+          meBuilder.addBinaryBody( "{{baseName}}", {{paramName}}, ContentType.create( getMimeType( {{paramName}} ) ), {{paramName}}.getName() );
+        }
+        {{/isFile}}
+        {{/formParams}}
+
+
+        if(hasFields){
+          httpEntity = meBuilder.build();
+        }
+    }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "{{httpMethod}}", queryParams, {{#bodyParam}}{{bodyParam}}{{/bodyParam}}{{^bodyParam}}null{{/bodyParam}}, headerParams, contentType, httpEntity);
+      if(response != null){
+        return {{#returnType}}({{{returnType}}}) ApiInvoker.deserialize(response, "{{returnContainer}}", {{returnBaseType}}.class){{/returnType}};
+      }
+      else {
+        return {{#returnType}}null{{/returnType}};
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+        return {{#returnType}} null{{/returnType}};
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  {{/operation}}
+}
+{{/operations}}
