@@ -45,10 +45,17 @@ public class AttachmentUtils {
    private boolean                 ignoreSSLCertificates      = false;
    private ApiInvoker              apiInvoker                 = ApiInvoker.getInstance();
    private ClientConnectionManager ignoreSSLConnectionManager;
+   private String                  basePath;
 
-   public AttachmentUtils() {
+   protected AttachmentUtils() {
       initConnectionManager();
    }
+
+
+   public void setBasePath( String basePath ) {
+      this.basePath = basePath;
+   }
+   
 
    private HttpClient initClient(String host) {
       if (client == null) {
@@ -68,21 +75,21 @@ public class AttachmentUtils {
    }
    
    
-   public InputStream getAttachmentInputStream (String basePath, String cloudletId, String attachmentId) throws ApiException, IOException {
+   public InputStream getAttachmentInputStream (String cloudletId, String attachmentId) throws ApiException, IOException {
    
-      final HttpEntity   resEntity = this.getAttachment( basePath, cloudletId, attachmentId );
+      final HttpEntity   resEntity = this.getAttachment( cloudletId, attachmentId );
       
       return resEntity.getContent();
    }
    
    
-   public File getAttachmentFile (String basePath, File file, String cloudletId, String attachmentId) throws ApiException, IOException {
+   public File getAttachmentFile (File file, String cloudletId, String attachmentId) throws ApiException, IOException {
     
       if (file.exists()){
          throw new ApiException(400, "file already exists: " + file.getAbsolutePath());
       }
       
-      final HttpEntity   resEntity = this.getAttachment( basePath, cloudletId, attachmentId );
+      final HttpEntity   resEntity = this.getAttachment(cloudletId, attachmentId );
 
       final BufferedHttpEntity bhe = new BufferedHttpEntity(resEntity );
       final FileOutputStream   os  = new FileOutputStream(file);
@@ -97,7 +104,7 @@ public class AttachmentUtils {
    }
    
    
-   private HttpEntity getAttachment (String basePath, String cloudletId, String attachmentId) throws ApiException, IOException {
+   private HttpEntity getAttachment (String cloudletId, String attachmentId) throws ApiException, IOException {
     // verify required params are set
       if(cloudletId == null || attachmentId == null ) {
          throw new ApiException(400, "missing required params");

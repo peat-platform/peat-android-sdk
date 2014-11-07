@@ -81,6 +81,7 @@ public class OPENiUtils {
 
       if (null == aUtils){
          aUtils = new AttachmentUtils();
+         aUtils.setBasePath( getObjectApi().getBasePath() );
          aUtils.setIgnoreSSLCertificates( ignoreSSL );
       }
       return aUtils;
