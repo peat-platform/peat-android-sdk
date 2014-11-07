@@ -102,10 +102,10 @@ public class AttachmentUtils {
       if(cloudletId == null || attachmentId == null ) {
          throw new ApiException(400, "missing required params");
       }
-      else if ( !Utils.isCloudletId( cloudletId )){
+      else if ( !OPENiUtils.isCloudletId( cloudletId )){
          throw new ApiException(400, "invalid cloudletId format: " + cloudletId);
       }
-      else if (!Utils.isAttachmentId( attachmentId )){
+      else if (!OPENiUtils.isAttachmentId( attachmentId )){
          throw new ApiException(400, "invalid attachmentId format: " + attachmentId);
       }
 
