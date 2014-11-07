@@ -9,8 +9,11 @@ import eu.openiict.client.api.ObjectsApi;
 import eu.openiict.client.api.SearchApi;
 import eu.openiict.client.api.SubscriptionApi;
 import eu.openiict.client.api.TypesApi;
+import eu.openiict.client.model.OPENiObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -223,5 +226,12 @@ public class Utils {
       }
       
       return "";
+   }
+   
+   
+   public static final JSONArray getObjectData(final OPENiObject oObj){
+      
+      return (null != oObj.getData()) ? null : new JSONArray( oObj );
+      
    }
 }
