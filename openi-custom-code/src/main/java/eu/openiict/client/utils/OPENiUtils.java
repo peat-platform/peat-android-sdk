@@ -12,7 +12,6 @@ import eu.openiict.client.api.TypesApi;
 import eu.openiict.client.model.OPENiObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -20,7 +19,7 @@ import org.json.JSONObject;
  *
  * @author dmccarthy
  */
-public class Utils {
+public class OPENiUtils {
 
    public static final String CLOUDLET_PATTERN_MATCH              = "^c_[a-z0-9]{32}$";
    public static final String CLOUDLET_PATTERN_EXTRACT            = "c_[a-z0-9]{32}";
@@ -39,7 +38,7 @@ public class Utils {
    public static final String DEFAULT_PDFS_OBJECT_ID              = "00000003-5203-4f5b-df3e-7f06c795775d";
    public static final String DEFAULT_AUDIO_OBJECT_ID             = "00000004-5203-4f5b-df3e-7f06c795775d";
    
-   public Utils() {
+   public OPENiUtils() {
    }
 
    private static boolean         ignoreSSL;
@@ -53,7 +52,7 @@ public class Utils {
    private static TypesApi        tApi;
 
    
-   public static void setIgnoreSSL( boolean ignoreSSLVal ) {
+   public static void ignoreSSLCert( boolean ignoreSSLVal ) {
       ignoreSSL = ignoreSSLVal;
    }
 
@@ -229,9 +228,9 @@ public class Utils {
    }
    
    
-   public static final JSONArray getObjectData(final OPENiObject oObj){
+   public static final JSONObject getObjectData(final OPENiObject oObj){
       
-      return (null != oObj.getData()) ? null : new JSONArray( oObj );
+      return (null == oObj.getData()) ? null : new JSONObject( oObj.getData() );
       
    }
 }
