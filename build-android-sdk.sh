@@ -15,7 +15,7 @@ sed -i 's/datetime/String/' generated-code/android-java/src/main/java/eu/openiic
 
 cd generated-code/android-java/
 
-sed -i 's/<httpclient-version>4.0/<httpclient-version>4.3.2/' pom.xml
+cp -r ../../../openi-custom-code/src/main/java src/main/cd
 
 mvn package
 

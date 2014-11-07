@@ -8,6 +8,7 @@ import eu.openiict.client.common.ApiInvoker;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
@@ -67,33 +68,21 @@ public class AttachmentUtils {
    }
    
    
-   public File getAttachment (String basePath, File file, String cloudletId, String attachmentId) throws ApiException, IOException {
-    // verify required params are set
-      if(cloudletId == null || attachmentId == null ) {
-         throw new ApiException(400, "missing required params");
-      }
-      else if ( !Utils.isCloudletId( cloudletId )){
-         throw new ApiException(400, "invalid cloudletId format: " + cloudletId);
-      }
-      else if (!Utils.isAttachmentId( attachmentId )){
-         throw new ApiException(400, "invalid attachmentId format: " + attachmentId);
-      }
-      else if (file.exists()){
+   public InputStream getAttachmentInputStream (String basePath, String cloudletId, String attachmentId) throws ApiException, IOException {
+   
+      final HttpEntity   resEntity = this.getAttachment( basePath, cloudletId, attachmentId );
+      
+      return resEntity.getContent();
+   }
+   
+   
+   public File getAttachmentFile (String basePath, File file, String cloudletId, String attachmentId) throws ApiException, IOException {
+    
+      if (file.exists()){
          throw new ApiException(400, "file already exists: " + file.getAbsolutePath());
       }
-
-      // create path and map variables
-      final String path = "/attachments/{cloudletId}/{attachmentId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "cloudletId" + "\\}", apiInvoker.escapeString(cloudletId.toString())).replaceAll("\\{" + "attachmentId" + "\\}", apiInvoker.escapeString(attachmentId.toString()));
-
-      initClient(basePath);
-
-      final String url = basePath + path;
-
-      final HttpGet get = new HttpGet(url);
-      get.addHeader("Accept", "application/json");
-
-      final HttpResponse response  = client.execute(get); 
-      final HttpEntity   resEntity = response.getEntity();
+      
+      final HttpEntity   resEntity = this.getAttachment( basePath, cloudletId, attachmentId );
 
       final BufferedHttpEntity bhe = new BufferedHttpEntity(resEntity );
       final FileOutputStream   os  = new FileOutputStream(file);
@@ -105,6 +94,34 @@ public class AttachmentUtils {
       } 
       
       return file;
+   }
+   
+   
+   private HttpEntity getAttachment (String basePath, String cloudletId, String attachmentId) throws ApiException, IOException {
+    // verify required params are set
+      if(cloudletId == null || attachmentId == null ) {
+         throw new ApiException(400, "missing required params");
+      }
+      else if ( !Utils.isCloudletId( cloudletId )){
+         throw new ApiException(400, "invalid cloudletId format: " + cloudletId);
+      }
+      else if (!Utils.isAttachmentId( attachmentId )){
+         throw new ApiException(400, "invalid attachmentId format: " + attachmentId);
+      }
+
+      // create path and map variables
+      final String path = "/attachments/{cloudletId}/{attachmentId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "cloudletId" + "\\}", apiInvoker.escapeString(cloudletId.toString())).replaceAll("\\{" + "attachmentId" + "\\}", apiInvoker.escapeString(attachmentId.toString()));
+      
+      initClient(basePath);
+
+      final String url = basePath + path;
+
+      final HttpGet get = new HttpGet(url);
+      get.addHeader("Accept", "application/json");
+
+      final HttpResponse response  = client.execute(get); 
+      
+      return response.getEntity();
    }
    
    
