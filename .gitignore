@@ -1,3 +1,9 @@
 openi-android-sdk-1.0.0.jar
 swagger-codegen
+openi_android_project/openi-client-lib/libs
+openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/api
+openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/common
+openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/model
+openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/utils
 .idea
+.DS_Store
