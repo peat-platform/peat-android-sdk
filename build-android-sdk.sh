@@ -24,6 +24,8 @@ cd ~/repos/openi_android_sdk/openi_android_project
 
 cp -r ../swagger-codegen/generated-code/android-java/src/main/java/eu openi-client-lib/src/main/java
 
+mkdir openi-client-lib/libs
+
 cp -r ../swagger-codegen/generated-code/android-java/target/dependency/* openi-client-lib/libs
 
 bash gradlew assemble
