@@ -1,12 +1,14 @@
 #!/bin/sh
-cd swagger-codegen
 
-rm -fr generated-code/android-java
+
+rm -fr swagger-codegen/generated-code/android-java
 rm -fr openi_android_project/openi-client-lib/libs/*
 rm -fr openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/api
 rm -fr openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/common
 rm -fr openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/model
 rm -fr openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/utils
+
+cd swagger-codegen
 
 scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen http://$1/api-spec/v1
 
