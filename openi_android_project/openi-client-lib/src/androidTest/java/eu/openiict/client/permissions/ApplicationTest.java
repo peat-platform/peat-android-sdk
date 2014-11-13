@@ -1,4 +1,4 @@
-package com.openi.permissions;
+package eu.openiict.client.permissions;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
