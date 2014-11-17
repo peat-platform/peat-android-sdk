@@ -114,7 +114,7 @@ public class AttachmentUtils {
       }
 
       // create path and map variables
-      final String path = "/attachments/{cloudletId}/{attachmentId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "attachmentId" + "\\}", apiInvoker.escapeString(attachmentId.toString()));
+      final String path = "/attachments/{attachmentId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "attachmentId" + "\\}", apiInvoker.escapeString(attachmentId.toString()));
 
       initClient(basePath);
 
