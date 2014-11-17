@@ -55,7 +55,7 @@ public class AttachmentUtils {
    public void setBasePath( String basePath ) {
       this.basePath = basePath;
    }
-   
+
 
    private HttpClient initClient(String host) {
       if (client == null) {
@@ -73,23 +73,23 @@ public class AttachmentUtils {
    public void setIgnoreSSLCertificates( boolean ignoreSSLCertificates ) {
       this.ignoreSSLCertificates = ignoreSSLCertificates;
    }
-   
-   
-   public InputStream getAttachmentInputStream (String cloudletId, String attachmentId) throws ApiException, IOException {
-   
-      final HttpEntity   resEntity = this.getAttachment( cloudletId, attachmentId );
-      
+
+
+   public InputStream getAttachmentInputStream (String authToken, String attachmentId) throws ApiException, IOException {
+
+      final HttpEntity   resEntity = this.getAttachment( authToken, attachmentId );
+
       return resEntity.getContent();
    }
-   
-   
-   public File getAttachmentFile (File file, String cloudletId, String attachmentId) throws ApiException, IOException {
-    
+
+
+   public File getAttachmentFile (File file, String authToken, String attachmentId) throws ApiException, IOException {
+
       if (file.exists()){
          throw new ApiException(400, "file already exists: " + file.getAbsolutePath());
       }
-      
-      final HttpEntity   resEntity = this.getAttachment(cloudletId, attachmentId );
+
+      final HttpEntity   resEntity = this.getAttachment(authToken, attachmentId );
 
       final BufferedHttpEntity bhe = new BufferedHttpEntity(resEntity );
       final FileOutputStream   os  = new FileOutputStream(file);
@@ -98,40 +98,38 @@ public class AttachmentUtils {
 
       while (bhe.isStreaming()) {
          bhe.writeTo(os);
-      } 
-      
+      }
+
       return file;
    }
-   
-   
-   private HttpEntity getAttachment (String cloudletId, String attachmentId) throws ApiException, IOException {
+
+
+   private HttpEntity getAttachment (String authToken, String attachmentId) throws ApiException, IOException {
     // verify required params are set
-      if(cloudletId == null || attachmentId == null ) {
+      if(authToken == null || attachmentId == null ) {
          throw new ApiException(400, "missing required params");
-      }
-      else if ( !OPENiUtils.isCloudletId( cloudletId )){
-         throw new ApiException(400, "invalid cloudletId format: " + cloudletId);
       }
       else if (!OPENiUtils.isAttachmentId( attachmentId )){
          throw new ApiException(400, "invalid attachmentId format: " + attachmentId);
       }
 
       // create path and map variables
-      final String path = "/attachments/{cloudletId}/{attachmentId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "cloudletId" + "\\}", apiInvoker.escapeString(cloudletId.toString())).replaceAll("\\{" + "attachmentId" + "\\}", apiInvoker.escapeString(attachmentId.toString()));
-      
+      final String path = "/attachments/{cloudletId}/{attachmentId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "attachmentId" + "\\}", apiInvoker.escapeString(attachmentId.toString()));
+
       initClient(basePath);
 
       final String url = basePath + path;
 
       final HttpGet get = new HttpGet(url);
-      get.addHeader("Accept", "application/json");
+      get.addHeader("Accept",        "application/json");
+      get.addHeader("Authorization", authToken);
 
-      final HttpResponse response  = client.execute(get); 
-      
+      final HttpResponse response  = client.execute(get);
+
       return response.getEntity();
    }
-   
-   
+
+
   private void initConnectionManager() {
     try {
       final SSLContext sslContext = SSLContext.getInstance("SSL");
