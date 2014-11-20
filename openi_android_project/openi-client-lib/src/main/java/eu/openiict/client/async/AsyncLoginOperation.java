@@ -59,6 +59,8 @@ public class AsyncLoginOperation extends AsyncTask<String, Void, String> {
          return sessionToken;
       }
       catch (ApiException e){
+
+         Log.d("sessionToken", "got token " + e.getMessage());
          return "error";
       }
 
