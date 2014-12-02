@@ -5,7 +5,8 @@ package eu.openiict.client.async.models;
  */
 public interface ILoginResponse {
 
-   public void onSuccess(String authToken);
-   public void onFailure();
+    public void onSuccess(String authToken);
+
+    public void onFailure();
 
 }

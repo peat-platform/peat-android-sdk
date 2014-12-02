@@ -3,49 +3,61 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import eu.openiict.client.api.ObjectsApi;
 import eu.openiict.client.async.models.ICloudletObjectCall;
 import eu.openiict.client.common.ApiException;
+import eu.openiict.client.model.OPENiObject;
 
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, Object> {
+public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPENiObject> {
 
-   private String              auth;
-   private ICloudletObjectCall iCloudletObjectCall;
+    String objectId;
+    Boolean resolveObject;
+    private String auth;
+    private String cloudletId;
+    private ICloudletObjectCall iCloudletObjectCall;
 
-
-   public AsyncGetCloudletObjectOperation(String auth, ICloudletObjectCall iCloudletObjectCall){
-      this.auth                = auth;
-      this.iCloudletObjectCall = iCloudletObjectCall;
-   }
-
-
-   @Override
-   protected Object doInBackground(String... params) {
-
-      try {
-         return iCloudletObjectCall.doProcess(auth);
-      }
-      catch (ApiException e){
-         return null;
-      }
-
-   }
+    private ObjectsApi objectsApi;
 
 
-   @Override
-   protected void onPostExecute(Object o) {
-      super.onPostExecute(o);
+    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String cloudletId, String objectId, Boolean resolveObject, String auth, ICloudletObjectCall iCloudletObjectCall) {
+        this.auth = auth;
+        this.cloudletId = cloudletId;
+        this.objectId = objectId;
+        this.resolveObject = resolveObject;
 
-      Log.d("AsyncGetCloudletObjectOperation", "token " + auth.toString());
-      Log.d("AsyncGetCloudletObjectOperation", "" + o);
+        this.objectsApi = objectsApi;
+        this.iCloudletObjectCall = iCloudletObjectCall;
+    }
 
-      if (null == o){
-         iCloudletObjectCall.onFailure();
-      }
-      else{
-         iCloudletObjectCall.onSuccess(o);
-      }
-   }
+
+    @Override
+    protected OPENiObject doInBackground(String... params) {
+
+        try {
+            //Boolean id_only = true;
+            return objectsApi.getObject(cloudletId, objectId, resolveObject, auth);
+        } catch (ApiException e) {
+            Log.d("AsyncGetCloudletOperation", e.toString());
+            return null;
+        }
+
+    }
+
+
+    @Override
+    protected void onPostExecute(OPENiObject o) {
+        super.onPostExecute(o);
+
+        //Log.d("AsyncGetCloudletObjectOperation", "token " + auth.toString());
+        Log.d("AsyncGetCloudletObjectOperation", "" + o);
+
+        if (null == o) {
+            iCloudletObjectCall.onFailure();
+        } else {
+            iCloudletObjectCall.onSuccess(o);
+        }
+    }
 }

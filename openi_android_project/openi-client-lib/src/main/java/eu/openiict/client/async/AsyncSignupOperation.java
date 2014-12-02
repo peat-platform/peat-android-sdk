@@ -4,31 +4,29 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import eu.openiict.client.api.AuthorizeApi;
-import eu.openiict.client.api.CloudletsApi;
 import eu.openiict.client.api.SessionApi;
+import eu.openiict.client.api.UsersApi;
 import eu.openiict.client.async.models.ILoginResponse;
 import eu.openiict.client.common.ApiException;
 import eu.openiict.client.model.AuthorizationRequest;
 import eu.openiict.client.model.Credentials;
 import eu.openiict.client.model.Session;
+import eu.openiict.client.model.UserRegisterRequest;
 
-/**
- * Created by dmccarthy on 15/11/14.
- */
-public class AsyncLoginOperation extends AsyncTask<String, Void, String> {
+
+public class AsyncSignupOperation extends AsyncTask<String, Void, String> {
 
     private SessionApi sessionApi;
     private AuthorizeApi authorizeApi;
-    private CloudletsApi cloudletsApi;
+    private UsersApi usersApi;
     private String clientId;
     private ILoginResponse iLoginResponse;
 
 
-    public AsyncLoginOperation(SessionApi sessionApi, AuthorizeApi authorizeApi, String clientId, ILoginResponse iLoginResponse) {
+    public AsyncSignupOperation(SessionApi sessionApi, AuthorizeApi authorizeApi, String clientId, ILoginResponse iLoginResponse) {
         this.sessionApi = sessionApi;
         this.authorizeApi = authorizeApi;
         this.clientId = clientId;
-        this.cloudletsApi = cloudletsApi;
         this.iLoginResponse = iLoginResponse;
     }
 
@@ -44,8 +42,14 @@ public class AsyncLoginOperation extends AsyncTask<String, Void, String> {
         final Credentials credentials = new Credentials();
         credentials.setName(userName);
         credentials.setPassword(password);
+        UserRegisterRequest user = new UserRegisterRequest();
+        user.setName(userName);
+        user.setPassword(password);
 
         try {
+            usersApi = new UsersApi();
+            usersApi.createUser(user);
+
             final Session session = sessionApi.login(credentials);
 
             Log.d("sessionToken", session.toString());
@@ -60,7 +64,6 @@ public class AsyncLoginOperation extends AsyncTask<String, Void, String> {
             Log.d("sessionToken", sessionToken);
 
             return sessionToken;
-
         } catch (ApiException e) {
 
             Log.d("sessionToken", "got token " + e.getMessage());

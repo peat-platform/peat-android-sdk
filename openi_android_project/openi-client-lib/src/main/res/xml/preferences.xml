@@ -1,217 +1,347 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="OPENi Settings">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="OPENi Settings">
+    <!-- Profile ** -->
     <PreferenceScreen
-            android:title="My profile"
-            android:summary="Let apps access my profile such as name, picture and other account information.">
+        android:summary="Let apps access my profile such as name, picture and other account information."
+        android:title="My profile"
+        android:key="openi_profile">
         <CheckBoxPreference
-                android:key="pref_profile"
-                android:title="My Profile"
-                android:summary="Let apps access my profile such as name, picture and other account information."
-                android:defaultValue="true"/>
+            android:defaultValue="true"
+            android:key="pref_profile"
+            android:summary="Let apps access my profile such as name, picture and other account information."
+            android:title="My Profile"/>
+
         <ListPreference
-                android:key="pref_profile_assignment"
+            android:defaultValue="Current App"
+            android:dependency="pref_profile"
+            android:dialogTitle="Assign to"
+            android:entries="@array/entries_list_assignment"
+            android:entryValues="@array/entryvalues_list_assignment"
+            android:key="pref_profile_assignment"
+            android:title="Assign to current app or all apps" />
+
+        <PreferenceScreen
+            android:dependency="pref_profile"
+            android:title="OPENi">
+            <SwitchPreference
+                android:defaultValue="true"
                 android:dependency="pref_profile"
-                android:title="Assign to current app or all apps"
-                android:entries="@array/entries_list_assignment"
-                android:entryValues="@array/entryvalues_list_assignment"
-                android:dialogTitle="Assign to"
-                android:defaultValue="Current App"/>
-        <PreferenceScreen
-                android:title="OPENi"
-                android:dependency="pref_profile">
+                android:summary=""
+                android:title="User Name"
+                android:key="openi_username"/>
             <SwitchPreference
-                    android:title="User Name" android:summary="John" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="Person"
+                android:title="User Type" />
             <SwitchPreference
-                    android:title="User Type" android:summary="Person" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary=""
+                android:title="First Name"
+                android:key="openi_first_name"/>
             <SwitchPreference
-                    android:title="Email" android:summary="jpearson@gmail.com" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary=""
+                android:title="Last Name"
+                android:key="openi_last_name"/>
             <SwitchPreference
-                    android:title="Password" android:summary="*******" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary=""
+                android:title="Email"
+                android:key="openi_email"/>
+            <SwitchPreference
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="*******"
+                android:title="Password"
+                android:key="openi_password"/>
         </PreferenceScreen>
+
         <PreferenceScreen
-                android:title="Pinterest"
-                android:key="pref_key_openi" android:dependency="pref_profile">
+            android:dependency="pref_profile"
+            android:key="pref_key_openi"
+            android:title="Pinterest">
             <SwitchPreference
-                    android:title="User Name" android:summary="John G" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="John G"
+                android:title="User Name" />
             <SwitchPreference
-                    android:title="User Type" android:summary="Person" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="Person"
+                android:title="User Type" />
             <SwitchPreference
-                    android:title="Email" android:summary="john_gough@gmail.com" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="john_gough@gmail.com"
+                android:title="Email" />
             <SwitchPreference
-                    android:title="Password" android:summary="*******" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="*******"
+                android:title="Password" />
         </PreferenceScreen>
+
         <PreferenceScreen
-                android:title="Facebook"
-                android:key="pref_key_openi" android:dependency="pref_profile">
+            android:dependency="pref_profile"
+            android:key="pref_key_openi"
+            android:title="Facebook">
             <SwitchPreference
-                    android:title="User Name" android:summary="Michael Jordan"
-                    android:key="openi_username_switch_preference" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:key="openi_username_switch_preference"
+                android:summary="Michael Jordan"
+                android:title="User Name" />
             <SwitchPreference
-                    android:title="User Type" android:summary="Person" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="Person"
+                android:title="User Type" />
             <SwitchPreference
-                    android:title="Email" android:summary="mjordah@gmail.com" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="mjordah@gmail.com"
+                android:title="Email" />
             <SwitchPreference
-                    android:title="Password" android:summary="*******" android:defaultValue="true"
-                    android:dependency="pref_profile"/>
+                android:defaultValue="true"
+                android:dependency="pref_profile"
+                android:summary="*******"
+                android:title="Password" />
         </PreferenceScreen>
+
     </PreferenceScreen>
+    <!-- Wallet -->
     <Preference
-            android:title="My online wallet accounts"
-            android:summary="Let apps use my online wallet accounts."/>
+        android:summary="Let apps use my online wallet accounts."
+        android:title="My online wallet accounts"
+        android:key="openi_wallet"/>
+    <!-- Device -->
     <Preference
-            android:title="My device unique identifiers"
-            android:summary="Let apps use my device unique identifiers (MAC, IP, UDID, UUID, Advertising ID)."/>
+        android:summary="Let apps use my device unique identifiers (MAC, IP, UDID, UUID, Advertising ID)."
+        android:title="My device unique identifiers"
+        android:key="openi_device"/>
+    <!-- Contact -->
     <Preference
-            android:title="My contact information"
-            android:summary="Let apps access my contacts information."/>
+        android:summary="Let apps access my contacts information."
+        android:title="My contact information"
+        android:key="openi_contact"/>
+    <!-- Media ** -->
     <PreferenceScreen
-            android:title="My Media"
-            android:summary="Let apps use my media.">
+        android:summary="Let apps use my media."
+        android:title="My Media"
+        android:key="openi_media">
         <CheckBoxPreference
-                android:key="pref_media"
-                android:title="My Media" android:summary="Let apps use my media." android:defaultValue="true"/>
+            android:defaultValue="true"
+            android:key="pref_media"
+            android:summary="Let apps use my media."
+            android:title="My Media" />
         <ListPreference
-                android:key="pref_media_assignment"
-                android:dependency="pref_media"
-                android:title="Assign to current app or all apps"
-                android:entries="@array/entries_list_assignment"
-                android:entryValues="@array/entryvalues_list_assignment"
-                android:dialogTitle="Assign to"
-                android:defaultValue="Current App"/>
+            android:defaultValue="Current App"
+            android:dependency="pref_media"
+            android:dialogTitle="Assign to"
+            android:entries="@array/entries_list_assignment"
+            android:entryValues="@array/entryvalues_list_assignment"
+            android:key="pref_media_assignment"
+            android:title="Assign to current app or all apps" />
         <PreferenceCategory
-                android:title="Images" android:dependency="pref_media">
+            android:dependency="pref_media"
+            android:title="Images">
             <CheckBoxPreference
-                    android:key="pref_images"
-                    android:title="Images" android:dependency="pref_media" android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_media"
+                android:key="pref_images"
+                android:title="Images" />
             <SwitchPreference
-                    android:title="Facebook" android:dependency="pref_images" android:key="pref_images_facebook"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_images"
+                android:key="pref_images_facebook"
+                android:title="Facebook" />
             <SwitchPreference
-                    android:title="Pinterest" android:dependency="pref_images" android:key="pref_images_pinterest"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_images"
+                android:key="pref_images_pinterest"
+                android:title="Pinterest" />
             <SwitchPreference
-                    android:title="Twitter" android:dependency="pref_images" android:key="pref_images_twitter"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_images"
+                android:key="pref_images_twitter"
+                android:title="Twitter" />
         </PreferenceCategory>
         <PreferenceCategory android:title="Audio">
             <CheckBoxPreference
-                    android:key="pref_audio"
-                    android:title="Audio" android:dependency="pref_media" android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_media"
+                android:key="pref_audio"
+                android:title="Audio" />
             <SwitchPreference
-                    android:title="Facebook" android:dependency="pref_audio" android:key="pref_audio_facebook"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_audio"
+                android:key="pref_audio_facebook"
+                android:title="Facebook" />
             <SwitchPreference
-                    android:title="Pinterest" android:dependency="pref_audio" android:key="pref_audio_pinterest"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_audio"
+                android:key="pref_audio_pinterest"
+                android:title="Pinterest" />
             <SwitchPreference
-                    android:title="Twitter" android:dependency="pref_audio" android:key="pref_audio_twitter"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_audio"
+                android:key="pref_audio_twitter"
+                android:title="Twitter" />
         </PreferenceCategory>
         <PreferenceCategory android:title="Videos">
             <CheckBoxPreference
-                    android:key="pref_videos"
-                    android:title="Videos" android:dependency="pref_media" android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_media"
+                android:key="pref_videos"
+                android:title="Videos" />
             <SwitchPreference
-                    android:title="Facebook" android:dependency="pref_videos" android:key="pref_videos_facebook"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_videos"
+                android:key="pref_videos_facebook"
+                android:title="Facebook" />
             <SwitchPreference
-                    android:title="Pinterest" android:dependency="pref_videos" android:key="pref_videos_pinterest"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_videos"
+                android:key="pref_videos_pinterest"
+                android:title="Pinterest" />
             <SwitchPreference
-                    android:title="Twitter" android:dependency="pref_videos" android:key="pref_videos_twitter"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_videos"
+                android:key="pref_videos_twitter"
+                android:title="Twitter" />
         </PreferenceCategory>
     </PreferenceScreen>
+    <!-- Webcam&Micro -->
     <Preference
-            android:title="Webcam &amp; Microphone"
-            android:summary="Let apps use my Webcam and Microphone."/>
+        android:summary="Let apps use my Webcam and Microphone."
+        android:title="Webcam &amp; Microphone"
+        android:key="openi_webcam_micro"/>
+    <!-- SocialActivity -->
     <Preference
-            android:title="Social Activity"
-            android:summary="Let apps access information about my social activity."/>
+        android:summary="Let apps access information about my social activity."
+        android:title="Social Activity"
+        android:key="openi_social"/>
+    <!-- Produc&Service -->
     <Preference
-            android:title="Product &amp; Services"
-            android:summary="Let apps use my services and product information."/>
+        android:summary="Let apps use my services and product information."
+        android:title="Product &amp; Services"
+        android:key="openi_product_service"/>
+    <!-- Health & Condition -->
     <Preference
-            android:title="Health Factors &amp; Condition"
-            android:summary="Let apps access my health profile information."/>
+        android:summary="Let apps access my health profile information."
+        android:title="Health Factors &amp; Condition"
+        android:key="openi_health"/>
+    <!-- My Location ** -->
     <PreferenceScreen
-            android:title="My Locations" android:summary="Let apps use my location." android:defaultValue="true">
+        android:defaultValue="true"
+        android:summary="Let apps use my location."
+        android:title="My Locations"
+        android:key="openi_location">
         <CheckBoxPreference
-                android:key="pref_location"
-                android:title="My Locations" android:summary="Let apps use my location." android:defaultValue="true"/>
+            android:defaultValue="true"
+            android:key="pref_location"
+            android:summary="Let apps use my location."
+            android:title="My Locations" />
         <ListPreference
-                android:key="pref_location_provider"
-                android:dependency="pref_location"
-                android:title="Location provider"
-                android:summary="Network"
-                android:entries="@array/entries_list_location"
-                android:entryValues="@array/entryvalues_list_location"
-                android:dialogTitle="Set location provider" android:defaultValue="Network"/>
+            android:defaultValue="Network"
+            android:dependency="pref_location"
+            android:dialogTitle="Set location provider"
+            android:entries="@array/entries_list_location"
+            android:entryValues="@array/entryvalues_list_location"
+            android:key="pref_location_provider"
+            android:summary="Network"
+            android:title="Location provider" />
         <ListPreference
-                android:key="pref_location_assignment"
-                android:dependency="pref_location"
-                android:title="Assign to current app or all apps"
-                android:entries="@array/entries_list_assignment"
-                android:entryValues="@array/entryvalues_list_assignment"
-                android:dialogTitle="Assign to"
-                android:defaultValue="Current App"/>
+            android:defaultValue="Current App"
+            android:dependency="pref_location"
+            android:dialogTitle="Assign to"
+            android:entries="@array/entries_list_assignment"
+            android:entryValues="@array/entryvalues_list_assignment"
+            android:key="pref_location_assignment"
+            android:title="Assign to current app or all apps" />
 
         <PreferenceCategory android:title="Events">
             <CheckBoxPreference
-                    android:key="pref_events"
-                    android:title="Enable Events" android:summary="" android:dependency="pref_location"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_location"
+                android:key="pref_events"
+                android:summary=""
+                android:title="Enable Events" />
             <SwitchPreference
-                    android:title="Facebook" android:dependency="pref_events" android:key="pref_events_facebook"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_events"
+                android:key="pref_events_facebook"
+                android:title="Facebook" />
             <SwitchPreference
-                    android:title="Pinterest" android:dependency="pref_events" android:key="pref_events_pinterest"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_events"
+                android:key="pref_events_pinterest"
+                android:title="Pinterest" />
             <SwitchPreference
-                    android:title="Twitter" android:dependency="pref_events" android:key="pref_events_twitter"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_events"
+                android:key="pref_events_twitter"
+                android:title="Twitter" />
         </PreferenceCategory>
 
         <PreferenceCategory android:title="Places">
             <CheckBoxPreference
-                    android:key="pref_places"
-                    android:title="Enable Places" android:dependency="pref_location" android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_location"
+                android:key="pref_places"
+                android:title="Enable Places" />
             <SwitchPreference
-                    android:title="Facebook" android:dependency="pref_places" android:key="pref_places_facebook"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_places"
+                android:key="pref_places_facebook"
+                android:title="Facebook" />
             <SwitchPreference
-                    android:title="Pinterest" android:dependency="pref_places" android:key="pref_places_pinterest"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_places"
+                android:key="pref_places_pinterest"
+                android:title="Pinterest" />
             <SwitchPreference
-                    android:title="Twitter" android:dependency="pref_places" android:key="pref_places_twitter"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_places"
+                android:key="pref_places_twitter"
+                android:title="Twitter" />
         </PreferenceCategory>
 
-        <PreferenceCategory
-                android:title="Reviews">
+        <PreferenceCategory android:title="Reviews">
             <CheckBoxPreference
-                    android:key="pref_reviews"
-                    android:title="Enable Reviews" android:dependency="pref_location" android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_location"
+                android:key="pref_reviews"
+                android:title="Enable Reviews" />
             <SwitchPreference
-                    android:title="Facebook" android:dependency="pref_reviews" android:key="pref_places_facebook"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_reviews"
+                android:key="pref_places_facebook"
+                android:title="Facebook" />
             <SwitchPreference
-                    android:title="Pinterest" android:dependency="pref_reviews" android:key="pref_places_pinterest"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_reviews"
+                android:key="pref_places_pinterest"
+                android:title="Pinterest" />
             <SwitchPreference
-                    android:title="Twitter" android:dependency="pref_reviews" android:key="pref_places_twitter"
-                    android:defaultValue="true"/>
+                android:defaultValue="true"
+                android:dependency="pref_reviews"
+                android:key="pref_places_twitter"
+                android:title="Twitter" />
         </PreferenceCategory>
     </PreferenceScreen>
+
+    <!--<ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />-->
+
 </PreferenceScreen>
