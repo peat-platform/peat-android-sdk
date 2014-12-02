@@ -3,12 +3,15 @@ package eu.openiict.client.async;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.openiict.client.R;
@@ -26,8 +29,10 @@ import eu.openiict.client.async.models.ILoginResponse;
 import eu.openiict.client.async.models.IPostPermissionsResponse;
 import eu.openiict.client.async.models.ISearchCloudletsResults;
 import eu.openiict.client.async.models.ISearchOneCloudletResults;
+import eu.openiict.client.common.ApiException;
 import eu.openiict.client.model.OPENiObject;
 import eu.openiict.client.model.Permissions;
+import eu.openiict.client.model.PermissionsResponse;
 
 /**
  * Created by dmccarthy on 14/11/14.
@@ -175,8 +180,10 @@ public class OPENiAsync {
                         setPref(OPENi_PREFERENCE_TOKEN, authToken);
                         Toast toast = Toast.makeText(context, "OPENi: Logged In!", Toast.LENGTH_SHORT);
                         toast.show();
-                        authTokenResponse.onSuccess(authToken);
+                        //authTokenResponse.onSuccess(authToken);
                         login.dismiss();
+                        authTokenResponse.onSuccess(authToken);
+                        appPermissions();
                     }
 
                     @Override
@@ -200,6 +207,76 @@ public class OPENiAsync {
         login.show();
     }
 
+    public void appPermissions(){
+        getAuthToken(new IAuthTokenResponse() {
+            @Override
+            public void onSuccess(String authToken) {
+                final Dialog appPerm = new Dialog(context);
+                appPerm.setContentView(R.layout.app_perms_screen);
+                appPerm.setTitle("OPENi App Permissions");
+
+                Button btnAcceptPerms = (Button) appPerm.findViewById(R.id.btnAcceptAppPerms);
+                TextView permsView = (TextView) appPerm.findViewById(R.id.permsView);
+
+                CharSequence text = Html.fromHtml("App <b>OPENi</b> needs access to the following objects of yours:</br>" +
+                        "<b> User , Photo , Video </b>");
+
+                permsView.setText(text);
+
+                btnAcceptPerms.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Permissions permissions = new Permissions();
+                        permissions.setAccessLevel("APP");
+                        permissions.setAccessType("READ");
+                        permissions.setRef("t_402d94dd3b59ecd8cce7e037f32932cb-1363");
+                        permissions.setType("type");
+
+                        List<Permissions> permissionsList = new ArrayList<Permissions>();
+
+                        permissionsList.add(permissions);
+                        permissions.setAccessType("CREATE");
+                        permissionsList.add(permissions);
+                        permissions.setAccessType("UPDATE");
+                        permissionsList.add(permissions);
+                        permissions.setAccessType("DELETE");
+                        permissionsList.add(permissions);
+
+                        postPermissions(permissionsList, new IPostPermissionsResponse() {
+                            @Override
+                            public Object doProcess(String authToken) throws ApiException {
+                                return null;
+                            }
+
+                            @Override
+                            public void onSuccess(PermissionsResponse obj) {
+                                Toast.makeText(context, "App Permissions: Granted", Toast.LENGTH_SHORT).show();
+                                //authTokenResponse.onSuccess(getPref(OPENi_PREFERENCE_TOKEN));
+                                appPerm.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Toast.makeText(context, "App Permissions: Error", Toast.LENGTH_SHORT).show();
+                                appPerm.dismiss();
+                            }
+                        });
+                    }
+                });
+
+                appPerm.show();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(context, "Connection Error", Toast.LENGTH_SHORT);
+            }
+        });
+
+    }
+
+
+
     public void setPref(String key, String value) {
         //if (!OPENi_PREFERENCE_MISSING.equals(getPref(key))) {
             final SharedPreferences.Editor edit = this.prefs.edit();
@@ -218,6 +295,7 @@ public class OPENiAsync {
         final SharedPreferences.Editor edit = this.prefs.edit();
         edit.clear();
         edit.commit();
+        Toast.makeText(context, "Logged Out", Toast.LENGTH_SHORT).show();
     }
 
     public void getCloudletObject(final String cloudletId, final String objectid, final ICloudletObjectCall iCloudletObjectCall) {
