@@ -18,6 +18,7 @@ sed -i 's/import eu.openiict.client.model.Object;//' generated-code/android-java
 sed -i 's/import eu.openiict.client.model.Related;/import eu.openiict.client.model.Context;/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/JSON/Map/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/private List<Map> cbs = new ArrayList<JSON>();/private List<Map> cbs = new ArrayList<Map>();/'  generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/Integer id, String box, String classification, String background, String format, String color, String text, String font, String background_color, String text_copy, String Authorization, String format/Integer id, String box, String classification, String background, String format, String color, String text, String font, String background_color, String text_copy, String Authorization/'
 sed -i 's/related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/Related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/datetime/String/' generated-code/android-java/src/main/java/eu/openiict/client/model/*

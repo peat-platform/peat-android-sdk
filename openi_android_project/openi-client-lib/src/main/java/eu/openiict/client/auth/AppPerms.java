@@ -26,7 +26,7 @@ public class AppPerms extends Activity implements OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        openi = OPENiAsync.getOPENiAsync();
+        openi = OPENiAsync.instance();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_perms_screen);

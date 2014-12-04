@@ -21,16 +21,5 @@ mvn dependency:copy-dependencies
 
 cp target/openi-android-client-1.0.0.jar ../../../openi-cloudlet-android-sdk-1.0.0.jar
 
-cd ~/repos/openi_android_sdk/openi_android_project
-
-cp -r ../swagger-codegen/generated-code/android-java/src/main/java/eu openi-client-lib/src/main/java
-
-mkdir -p openi-client-lib/libs
-
-cp -r ../swagger-codegen/generated-code/android-java/target/dependency/* openi-client-lib/libs
-
-bash gradlew assemble
-
-cp openi-client-lib/build/outputs/aar/openi-client-lib.aar ..
 
 

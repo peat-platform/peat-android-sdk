@@ -41,8 +41,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
         setProgressBarIndeterminateVisibility(true);
         setProgressBarVisibility(true);*/
 
-        OPENiAsync.initOPENiAsync("velti", PermissionsActivity.this);
-        this.openi = OPENiAsync.getOPENiAsync();
+        this.openi = OPENiAsync.instance();
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
@@ -102,7 +101,6 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
                 System.out.println("Booom error1");
             }
         };
-        this.openi.getCloudletID(cloudletIDresp);
         //this.openi.prefs.getString()
 
 
@@ -127,8 +125,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
 
     @Override
     protected void onResume() {
-        OPENiAsync.initOPENiAsync("velti", PermissionsActivity.this);
-        this.openi = OPENiAsync.getOPENiAsync();
+        this.openi = OPENiAsync.instance();
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
