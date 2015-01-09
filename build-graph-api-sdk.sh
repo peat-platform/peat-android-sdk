@@ -12,6 +12,7 @@ sed -i 's/import eu.openiict.client.model.Related;/import eu.openiict.client.mod
 sed -i 's/related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/Related/Context/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/datetime/String/' generated-code/android-java/src/main/java/eu/openiict/client/model/*
+sed -i 's/JSON/Map/g'       generated-code/android-java/src/main/java/eu/openiict/client/model/*
 
 cd generated-code/android-java/
 
