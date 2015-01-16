@@ -17,7 +17,12 @@ sudo apt-get install sbt -y
 
 rm -fr sbt.deb  scala-2.10.3.deb
 
-git clone https://github.com/wordnik/swagger-codegen.git
+wget https://github.com/swagger-api/swagger-codegen/archive/2.0.17.tar.gz
+
+tar -xvf 2.0.17.tar.gz
+
+rm -f 2.0.17.tar.gz
+mv swagger-codegen-2.0.17 swagger-codegen
 
 cp -r openi-custom-code/src/main/scala/*     swagger-codegen/src/main/scala/
 cp -r openi-custom-code/src/main/resources/* swagger-codegen/src/main/resources/
@@ -26,6 +31,6 @@ cd swagger-codegen
 
 ./sbt assembly
 
-mv target/scala-2.10/swagger-codegen*.jar target/scala-2.10/swagger-codegen.jar
+mv target/scala-2.11/swagger-codegen*.jar target/scala-2.11/swagger-codegen.jar
 
 mkdir -p generated-code/android-java/src/main/java
