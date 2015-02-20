@@ -7,6 +7,8 @@ public interface IAuthTokenResponse {
 
     public void onSuccess(String authToken);
 
-    public void onFailure();
+    public void onAppPermsDenied(String perms);
+
+    public void onFailure(String error);
 
 }

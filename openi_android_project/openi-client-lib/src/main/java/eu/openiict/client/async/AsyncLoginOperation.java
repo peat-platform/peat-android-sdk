@@ -3,13 +3,11 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import eu.openiict.client.api.AuthorizeApi;
+import eu.openiict.client.api.AuthorizationsApi;
 import eu.openiict.client.api.CloudletsApi;
-import eu.openiict.client.api.SessionApi;
 import eu.openiict.client.async.models.ILoginResponse;
 import eu.openiict.client.common.ApiException;
-import eu.openiict.client.model.AuthorizationRequest;
-import eu.openiict.client.model.Credentials;
+import eu.openiict.client.model.Auth_Credentials;
 import eu.openiict.client.model.Session;
 
 /**
@@ -17,18 +15,18 @@ import eu.openiict.client.model.Session;
  */
 public class AsyncLoginOperation extends AsyncTask<String, Void, String> {
 
-    private SessionApi sessionApi;
-    private AuthorizeApi authorizeApi;
+    private AuthorizationsApi authorizeApi;
     private CloudletsApi cloudletsApi;
-    private String clientId;
+    private String api_key;
+    private String secret;
     private ILoginResponse iLoginResponse;
 
 
-    public AsyncLoginOperation(SessionApi sessionApi, AuthorizeApi authorizeApi, String clientId, ILoginResponse iLoginResponse) {
-        this.sessionApi = sessionApi;
+    public AsyncLoginOperation( AuthorizationsApi authorizeApi, String api_key, String secret, ILoginResponse iLoginResponse) {
+
         this.authorizeApi = authorizeApi;
-        this.clientId = clientId;
-        this.cloudletsApi = cloudletsApi;
+        this.api_key = api_key;
+        this.secret = secret;
         this.iLoginResponse = iLoginResponse;
     }
 
@@ -41,25 +39,27 @@ public class AsyncLoginOperation extends AsyncTask<String, Void, String> {
 
         Log.d("sessionToken", userName);
 
-        final Credentials credentials = new Credentials();
-        credentials.setName(userName);
+        final Auth_Credentials credentials = new Auth_Credentials();
+        credentials.setUsername(userName);
         credentials.setPassword(password);
+        credentials.setApiKey(api_key);
+        credentials.setSecret(secret);
 
         try {
-            final Session session = sessionApi.login(credentials);
+            final Session session = authorizeApi.getAuthToken(credentials);
 
             Log.d("sessionToken", session.toString());
 
-            final AuthorizationRequest authReq = new AuthorizationRequest();
+            /*final AuthorizationRequest authReq = new AuthorizationRequest();
 
             authReq.setClientId(clientId);
             authReq.setSession(session.getSession());
 
             final String sessionToken = authorizeApi.authorizeClient(authReq).getToken();
 
-            Log.d("sessionToken", sessionToken);
+            Log.d("sessionToken", sessionToken);*/
 
-            return sessionToken;
+            return session.getSession();
 
         } catch (ApiException e) {
 

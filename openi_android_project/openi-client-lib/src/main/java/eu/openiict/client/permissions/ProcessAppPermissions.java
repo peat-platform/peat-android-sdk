@@ -4,17 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +22,9 @@ import eu.openiict.client.async.models.IOPENiAPiCall;
 import eu.openiict.client.async.models.IPermissionsResult;
 import eu.openiict.client.async.models.IPostPermissionsResponse;
 import eu.openiict.client.common.ApiException;
-import eu.openiict.client.model.Badge;
 import eu.openiict.client.model.OPENiType;
 import eu.openiict.client.model.Permissions;
 import eu.openiict.client.model.PermissionsResponse;
-import eu.openiict.client.utils.OPENiUtils;
 
 
 public class ProcessAppPermissions {
@@ -69,7 +64,7 @@ public class ProcessAppPermissions {
          return;
       }
 
-      OPENiAsync.instance().execOpeniApiCall(new IOPENiAPiCall() {
+      OPENiAsync.instance(null).execOpeniApiCall(new IOPENiAPiCall() {
          @Override
          public Object doProcess(String authToken) {
 
@@ -143,7 +138,7 @@ public class ProcessAppPermissions {
    }
 
    private void sendPermsToServer(final List<Permissions> perms){
-      OPENiAsync.instance().postPermissions(perms, new IPostPermissionsResponse() {
+      OPENiAsync.instance(null).postPermissions(perms, new IPostPermissionsResponse() {
          @Override
          public Object doProcess(String s) throws ApiException {
             return null;

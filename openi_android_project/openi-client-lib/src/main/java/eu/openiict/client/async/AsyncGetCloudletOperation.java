@@ -38,7 +38,6 @@ public class AsyncGetCloudletOperation extends AsyncTask<String, Void, OPENiClou
 
    }
 
-
    @Override
    protected void onPostExecute(OPENiCloudlet cloudlet) {
       super.onPostExecute(cloudlet);

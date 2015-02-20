@@ -4,22 +4,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import eu.openiict.client.R;
 import eu.openiict.client.async.OPENiAsync;
-import eu.openiict.client.async.models.ICloudletIdResponse;
-import eu.openiict.client.async.models.IPostPermissionsResponse;
-import eu.openiict.client.async.models.ISearchOneCloudletResults;
-import eu.openiict.client.common.ApiException;
-import eu.openiict.client.model.OPENiObject;
-import eu.openiict.client.model.OPENiObjectList;
-import eu.openiict.client.model.Permissions;
-import eu.openiict.client.model.PermissionsResponse;
+import eu.openiict.client.model.OPENiType;
 
 public class PermissionsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -33,6 +23,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
     public static final String KEY_MEDIA_ASSIGNMENT = "pref_media_assignment";
     private static OPENiAsync openi;
     private static String cloudletID;
+    private static ArrayList<OPENiType> typeList = new ArrayList<OPENiType>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +32,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
         setProgressBarIndeterminateVisibility(true);
         setProgressBarVisibility(true);*/
 
-        this.openi = OPENiAsync.instance();
+        this.openi = OPENiAsync.instance(this);
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
@@ -57,15 +48,18 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
         prefList.add(findPreference("openi_product_service"));
         prefList.add(findPreference("openi_health"));
         prefList.add(findPreference("openi_location"));
-
-        for (Integer y = 0; y < 10; y++) {
+        
+        //getTypesList(0);
+        
+        /*for (Integer y = 0; y < 10; y++) {
             prefList.get(y).setEnabled(false);
-        }
+        }*/
+
         //final Preference prefEntry = findPreference(pref_key);
         //ProgressBar spinner = new ProgressBar(this);
         //spinner.setVisibility(View.VISIBLE);
 
-        // get cloudletID
+/*        // get cloudletID
         ICloudletIdResponse cloudletIDresp = new ICloudletIdResponse() {
             @Override
             public void onSuccess(String cloudletID) {
@@ -99,11 +93,12 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
             @Override
             public void onFailure() {
                 System.out.println("Booom error1");
-            }
+            }  
         };
+        */
         //this.openi.prefs.getString()
 
-
+/*
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Profile
@@ -119,13 +114,95 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
         // Media
         Preference mediaAssignmentPreference = findPreference(KEY_MEDIA_ASSIGNMENT);
         mediaAssignmentPreference.setSummary(sharedPreferences.getString(KEY_MEDIA_ASSIGNMENT, "Current App"));
+*/
 
 
     }
+ 
+    /*private ArrayList getTypesList(final Integer offset){
+        TypesApi typesApi = new TypesApi();
+        //Integer offset = 0;
+        //OPENiTypeList typeList = new OPENiTypeList();
+        try {
+            OPENiTypeList tmpTypeList2 = typesApi.getTypes(offset,30,false, null);
+            for (Iterator<OPENiType> i = tmpTypeList2.getResult().iterator(); i.hasNext();){
+                OPENiType item = i.next();
+                typeList.add(item);
+            }
+            if (tmpTypeList2.getResult().size() == 30){
+                getTypesList(offset+30);
+            }
+            else{
+                System.out.println(typeList);
+                return typeList;
+            }
+            //return typesApi.getTypes(offset,30,false, null);
+            //return typeList;
+        } catch (ApiException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
+    
+/*
+    
+    private void getTypesList(final Integer offset){
+        
+        openi.execOpeniApiCall(new IOPENiAPiCall() {
+            @Override
+            public OPENiTypeList doProcess(String authToken) {
+                TypesApi typesApi = new TypesApi();
+                //OPENiTypeList typeList = new OPENiTypeList();
+                try {
+                    OPENiTypeList tmpTypeList2 = typesApi.getTypes(offset,30,false, null);
+                    for (Iterator<OPENiType> i = tmpTypeList2.getResult().iterator(); i.hasNext();){
+                        OPENiType item = i.next();
+                        typeList.add(item);
+                    }
+                    if (tmpTypeList2.getResult().size() == 30){
+                        getTypesList(offset+30);
+                    }
+                    else{
+                        System.out.println(typeList);
+                        //return typeList;
+                    }
+                    return typesApi.getTypes(offset,30,false, null);
+                    //return typeList;
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
 
+            @Override
+            public void onSuccess(Object tmpTypeList) {
+                System.out.println(tmpTypeList);
+                OPENiTypeList tmpTypeList2 = (OPENiTypeList) tmpTypeList;
+                for (Iterator<OPENiType> i = tmpTypeList2.getResult().iterator(); i.hasNext();){
+                    OPENiType item = i.next();
+                    typeList.add(item);
+                }
+                if (tmpTypeList2.getResult().size() == 30){
+                    getTypesList(offset+30);
+                }
+                else{
+                    System.out.println(typeList);
+                    //return typeList;
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                System.out.println("get types error");
+            }
+        });
+        
+    }
+*/
+    
     @Override
     protected void onResume() {
-        this.openi = OPENiAsync.instance();
+        this.openi = OPENiAsync.instance(this);
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
@@ -138,24 +215,33 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_LOCATION_PROVIDER)) {
+        //sharedPreferences.getBoolean(key, false)
+        
+        if (sharedPreferences.getBoolean(key, false)){
+            // set Permissions
+            //openi.postPermissions();
+        } else {
+            // remove permisisons
+        }
+        
+        /*if (key.equals(KEY_LOCATION_PROVIDER)) {
             Preference locationProviderPreference = findPreference(KEY_LOCATION_PROVIDER);
             locationProviderPreference.setSummary(sharedPreferences.getString(key, ""));
-        }
+        }*/
     }
-
+/*
     public void filterMenusOnCloudletObjects(String typeid, Preference pref_key) {
 
         final Preference prefEntry = pref_key;
 
-        /*Preference.OnPreferenceClickListener clickListener = new Preference.OnPreferenceClickListener() {
+        *//*Preference.OnPreferenceClickListener clickListener = new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Toast toast = Toast.makeText(PermissionsActivity.this, preference.getTitle(), Toast.LENGTH_SHORT);
                 toast.show();
                 return true;
             }
         };
-        prefEntry.setOnPreferenceClickListener(clickListener);*/
+        prefEntry.setOnPreferenceClickListener(clickListener);*//*
 
         ISearchOneCloudletResults cloudletSearchResults = new ISearchOneCloudletResults() {
             @Override
@@ -165,7 +251,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
 
             @Override
             public void onSuccess(OPENiObjectList obj) {
-                System.out.println("Baaaang search: " + obj.getResult());
+                System.out.println("Pref search: " + obj.getResult());
                 if (obj.getResult().size() == 0) {
                     //prefEntry.setEnabled(false);
                     //prefEntry.setEnabled(true);
@@ -185,7 +271,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
 
     }
 
-    public void populateProfile(List<OPENiObject> results) {
+    private void populateProfile(List<OPENiObject> results) {
         findPreference("openi_username").setSummary(results.get(0).getData().get("username").toString());
 
         findPreference("openi_first_name").setSummary(results.get(0).getData().get("first_name").toString());
@@ -264,6 +350,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
 
         //openi_username.setSummary();
     }
+    */
 }
 
 
