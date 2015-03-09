@@ -15,6 +15,7 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 import eu.openiict.client.R;
@@ -34,7 +35,7 @@ import eu.openiict.client.async.models.ISearchCloudletsResults;
 import eu.openiict.client.async.models.ISearchOneCloudletResults;
 import eu.openiict.client.model.OPENiObject;
 import eu.openiict.client.model.Permissions;
-import eu.openiict.client.permissions.ProcessAppPermissions;
+import eu.openiict.client.settings.ProcessAppPermissions;
 
 //import org.apache.commons.codec.binary.Base64;
 
@@ -132,7 +133,8 @@ public class OPENiAsync {
 
     }
 
-/*   private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
+/*   
+private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
       final Dialog login = new Dialog(context);
       // Set GUI of login screen
       login.setContentView(R.layout.auth_activity_sign_in_screen);
@@ -184,7 +186,8 @@ public class OPENiAsync {
 
       // Make dialog box visible.
       login.show();
-   }*/
+   }
+   */
 
     private void openAuthDialog(final IAuthTokenResponse authTokenResponse) {
 
@@ -196,10 +199,10 @@ public class OPENiAsync {
         }
         web.getSettings().setJavaScriptEnabled(true);
         // TODO: get server ip dynamically
-        String perms = readPermissionsFromFile();
-        String bJson = Base64.encodeToString(perms .getBytes(), Base64.URL_SAFE);
-        final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "").replace("https://","http://");
-        web.loadUrl(basePathURL+":3000" + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost" + "&appPerms=" + bJson);
+        String perms = readPermissionsFromFile();//HERE  IT TAKES THE PERMISSIONS FROM A FILE
+        String bJson = Base64.encodeToString(perms.getBytes(), Base64.URL_SAFE);
+        final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");//.replace("https://","http://");
+        web.loadUrl(basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost" + "&appPerms=" + URLEncoder.encode(bJson));
         web.setWebViewClient(new WebViewClient() {
 
             boolean authComplete = false;
@@ -245,6 +248,15 @@ public class OPENiAsync {
                 if (url.contains("?OUST=") && url.startsWith("http://localhost") && authComplete != true) {
                     Uri uri = Uri.parse(url);
                     authCode = uri.getQueryParameter("OUST");
+                    String[] jwtParts = authCode.split("\\.");
+                    /*JsonObject jwtPayload = Json.createReader(
+                            new ByteArrayInputStream(eu.openiict.client.async.Base64.decode(jwtParts[1])))
+                            .readObject();*/
+                    //jwtPayload.get
+                    //auto tha sou vgalei to kanoniko kai swsto cloudletid
+                    /*URI iss = workaroundForGoogle(jwtPayload.getString("sub"));
+                    String username = UriBuilder.fromUri(iss).userInfo(jwtPayload.getString("sub")).build().toASCIIString();*/
+
                     setPref(OPENi_PREFERENCE_TOKEN, authCode);
                     Log.i("", "CODE : " + authCode);
                     authComplete = true;
@@ -434,8 +446,8 @@ public class OPENiAsync {
         // TODO: get server ip dynamically
         //String perms = readPermissionsFromFile();
         //String bJson = Base64.encodeToString(perms .getBytes(), Base64.URL_SAFE);
-        String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "").replace("https://","http://");
-        web.loadUrl(basePathURL+":3000" + "/auth/logout");
+        String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");//.replace("https://","http://");
+        web.loadUrl(basePathURL+/*":3000"*/  "/auth/logout");
         web.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -533,6 +545,9 @@ public class OPENiAsync {
                 @Override
                 public void onSuccess(String cloudletid) {
                     Log.d("OPENi", "Got cloudletid: " + cloudletid);
+                    // save cid
+                    //change this when you make the payload
+                    //setPref("cloudletid", cloudletid);
                     authTokenResponse.onSuccess(prefTokenValue);
                 }
 
@@ -663,4 +678,5 @@ public class OPENiAsync {
     public void processPermissions(Context context, String permsFileName, IPermissionsResult permissionsResult) {
         new ProcessAppPermissions(context, permissionsResult, permsFileName).execute();
     }
+    
 }

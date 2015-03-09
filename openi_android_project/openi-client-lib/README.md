@@ -98,4 +98,4 @@
 * Add permissions activity to Manifest:
 
 
-        <activity android:name="eu.openiict.client.permissions.PermissionsActivity" android:label="Permissions" />
+    <activity android:name="eu.openiict.client.permissions.PermissionsActivity" android:label="Permissions" />

@@ -1,4 +1,4 @@
-package eu.openiict.client.permissions;
+package eu.openiict.client.settings;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -139,11 +139,6 @@ public class ProcessAppPermissions {
 
    private void sendPermsToServer(final List<Permissions> perms){
       OPENiAsync.instance(null).postPermissions(perms, new IPostPermissionsResponse() {
-         @Override
-         public Object doProcess(String s) throws ApiException {
-            return null;
-         }
-
          @Override
          public void onSuccess(PermissionsResponse permissionsResponse) {
             Log.d("A", "" + permissionsResponse);
