@@ -10,7 +10,10 @@ rm -fr openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/u
 
 cd swagger-codegen
 
-scala -cp target/scala-2.10/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen http://$1/api-spec/v1
+//scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen http://$1/api-spec/v1
+
+//scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen http://dev.openi-ict.eu/api-spec/v1
+scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true eu.openiict.codegen.AndroidOPENiApiCodegen http://dev.openi-ict.eu/api-spec/v1/cloudlet
 
 sed -i 's/import eu.openiict.client.model.Datetime;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
 sed -i 's/import eu.openiict.client.model.Integer;//' generated-code/android-java/src/main/java/eu/openiict/client/model/*
