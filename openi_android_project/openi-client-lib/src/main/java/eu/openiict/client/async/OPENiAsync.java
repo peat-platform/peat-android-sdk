@@ -172,7 +172,7 @@ private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
         // TODO: get server ip dynamically
 
         final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");//.replace("https://","http://");
-        web.loadUrl(basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost";
+        web.loadUrl(basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost");
         web.setWebViewClient(new WebViewClient() {
 
             boolean authComplete = false;
