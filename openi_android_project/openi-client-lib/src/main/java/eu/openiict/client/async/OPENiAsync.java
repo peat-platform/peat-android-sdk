@@ -49,7 +49,6 @@ public class OPENiAsync {
     private Context context;
     private String api_key;
     private String secret;
-    private String appPermsFile;
     //   private              SessionApi        sessionApi;
     private AuthorizationsApi authorizeApi;
     private CloudletsApi cloudletsApi;
@@ -65,13 +64,11 @@ public class OPENiAsync {
 
     private SharedPreferences prefs;
 
-    private OPENiAsync(String api_key, String secret, Context context, String appPermsFile) {
+    private OPENiAsync(String api_key, String secret, Context context) {
         this.secret = secret;
         this.api_key = api_key;
         this.context = context;
         this.prefs = context.getSharedPreferences(OPENi_PUBLIC_PREFERENCES, Context.MODE_PRIVATE);
-        this.appPermsFile = appPermsFile;
-
 
 //      this.sessionApi     = new SessionApi();
         this.authorizeApi = new AuthorizationsApi();
@@ -88,10 +85,10 @@ public class OPENiAsync {
         this.permissionsApi.getInvoker().ignoreSSLCertificates(true);
     }
 
-    public static void init(String api_key, String secret, Context context, String appPermsFile) {
+    public static void init(String api_key, String secret, Context context) {
 
         if (null == openiAsync) {
-            openiAsync = new OPENiAsync(api_key, secret, context, appPermsFile);
+            openiAsync = new OPENiAsync(api_key, secret, context);
         }
 
     }
@@ -106,32 +103,6 @@ public class OPENiAsync {
         return openiAsync;
     }
 
-    private String readPermissionsFromFile(){
-
-        try {
-            final InputStream is = context.getAssets().open(appPermsFile);
-
-            final int size = is.available();
-
-            final byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            final String json = new String(buffer, "UTF-8");
-
-            //return new JSONArray( json );
-            return json;
-        }
-        catch (Exception ex) {
-            Log.d("A", ex.toString());
-            ex.printStackTrace();
-            //permissionsResult.onFailure("Error reading permissions file.");
-            return null;
-        }
-
-    }
 
 /*   
 private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
@@ -199,10 +170,9 @@ private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
         }
         web.getSettings().setJavaScriptEnabled(true);
         // TODO: get server ip dynamically
-        String perms = readPermissionsFromFile();//HERE  IT TAKES THE PERMISSIONS FROM A FILE
-        String bJson = Base64.encodeToString(perms.getBytes(), Base64.URL_SAFE);
+
         final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");//.replace("https://","http://");
-        web.loadUrl(basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost" + "&appPerms=" + URLEncoder.encode(bJson));
+        web.loadUrl(basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost";
         web.setWebViewClient(new WebViewClient() {
 
             boolean authComplete = false;
@@ -444,8 +414,6 @@ private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
         }
         web.getSettings().setJavaScriptEnabled(true);
         // TODO: get server ip dynamically
-        //String perms = readPermissionsFromFile();
-        //String bJson = Base64.encodeToString(perms .getBytes(), Base64.URL_SAFE);
         String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");//.replace("https://","http://");
         web.loadUrl(basePathURL+/*":3000"*/  "/auth/logout");
         web.setWebViewClient(new WebViewClient() {
@@ -675,8 +643,4 @@ private void openLoginDialog(final IAuthTokenResponse authTokenResponse) {
 
     }
 
-    public void processPermissions(Context context, String permsFileName, IPermissionsResult permissionsResult) {
-        new ProcessAppPermissions(context, permissionsResult, permsFileName).execute();
-    }
-    
 }
