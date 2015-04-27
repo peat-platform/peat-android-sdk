@@ -35,7 +35,6 @@ import eu.openiict.client.async.models.ISearchCloudletsResults;
 import eu.openiict.client.async.models.ISearchOneCloudletResults;
 import eu.openiict.client.model.OPENiObject;
 import eu.openiict.client.model.Permissions;
-import eu.openiict.client.settings.ProcessAppPermissions;
 
 //import org.apache.commons.codec.binary.Base64;
 
