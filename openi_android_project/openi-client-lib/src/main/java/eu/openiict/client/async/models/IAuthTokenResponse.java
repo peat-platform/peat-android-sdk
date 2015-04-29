@@ -9,6 +9,8 @@ public interface IAuthTokenResponse {
 
     public void onAppPermsDenied(String perms);
 
+    public void onAppPermsCancelled(String perms);
+
     public void onFailure(String error);
 
 }

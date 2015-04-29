@@ -27,12 +27,12 @@ public class AsyncGetCloudletOperation extends AsyncTask<String, Void, OPENiClou
    @Override
    protected OPENiCloudlet doInBackground(String... params) {
 
-      Log.d("AsyncGetCloudletOperation", token);
+      Log.d("AsyncGetCloudletOperati", token);
 
       try {
          return cloudletsApi.getCloudletId(token);
       } catch (ApiException e) {
-         Log.d("AsyncGetCloudletOperation", e.toString());
+         Log.d("AsyncGetCloudletOpe", e.toString());
          return null;
       }
 
@@ -46,7 +46,7 @@ public class AsyncGetCloudletOperation extends AsyncTask<String, Void, OPENiClou
          IcloudletIdResponse.onFailure();
       } else {
          try {
-            Log.d("AsyncGetCloudletOperation", "cloudlet " + cloudlet.toString());
+            Log.d("AsyncGetCloudletOpe", "cloudlet " + cloudlet.toString());
             IcloudletIdResponse.onSuccess(cloudlet.getId());
          } catch (Exception e) {
             IcloudletIdResponse.onFailure();

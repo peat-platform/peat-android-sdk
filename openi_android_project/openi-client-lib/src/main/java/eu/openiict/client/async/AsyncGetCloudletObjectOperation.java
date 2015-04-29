@@ -33,14 +33,26 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPE
     }
 
 
+    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String objectId, Boolean resolveObject, String auth, ICloudletObjectCall iCloudletObjectCall) {
+        this.auth = auth;
+        this.objectId = objectId;
+        this.resolveObject = resolveObject;
+
+        this.objectsApi = objectsApi;
+        this.iCloudletObjectCall = iCloudletObjectCall;
+    }
+
+
     @Override
     protected OPENiObject doInBackground(String... params) {
 
         try {
-            //Boolean id_only = true;
+            if (null == cloudletId){
+                return objectsApi.getObjectByAuthToken(objectId, resolveObject, auth);
+            }
             return objectsApi.getObject(cloudletId, objectId, resolveObject, auth);
         } catch (ApiException e) {
-            Log.d("AsyncGetCloudletOperation", e.toString());
+            Log.d("AsyncGetCloudletOper", e.toString());
             return null;
         }
 
@@ -52,7 +64,7 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPE
         super.onPostExecute(o);
 
         //Log.d("AsyncGetCloudletObjectOperation", "token " + auth.toString());
-        Log.d("AsyncGetCloudletObjectOperation", "" + o);
+        Log.d("AsyncGetCloudletObje", "" + o);
 
         if (null == o) {
             iCloudletObjectCall.onFailure();
