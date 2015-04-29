@@ -7,8 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -99,8 +102,19 @@ public class OPENiAsync {
 
     private void openAuthDialog(final IAuthTokenResponse authTokenResponse) {
 
-        final Dialog auth_dialog = new Dialog(context);
+
+        final Dialog auth_dialog = new Dialog(context, R.style.full_screen_dialog){
+           @Override
+           protected void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+              setContentView(R.layout.auth_dialog);
+              getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,
+                    WindowManager.LayoutParams.FILL_PARENT);
+           }
+        };
+
         auth_dialog.setContentView(R.layout.auth_dialog);
+
         final WebView web = (WebView) auth_dialog.findViewById(R.id.webv);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            WebView.setWebContentsDebuggingEnabled(true);
@@ -117,7 +131,7 @@ public class OPENiAsync {
         web.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         // TODO: get server ip dynamically
 
-       //final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "").replaceAll("https:", "http:");
+        //final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "").replaceAll("https:", "http:");
         final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "") ;
         final String URI        = basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost";
 
