@@ -50,8 +50,10 @@ public final class OPENiAsync {
 
     private static OPENiAsync openiAsync;
     private Context context;
-    private String api_key;
-    private String secret;
+    private String  api_key;
+    private String  secret;
+    private boolean cacheToken;
+    private volatile String tmpToken;
 
     private AuthorizationsApi authorizeApi;
     private CloudletsApi      cloudletsApi;
@@ -66,11 +68,12 @@ public final class OPENiAsync {
 
     private SharedPreferences prefs;
 
-    private OPENiAsync(String api_key, String secret, Context context, boolean ignoreSSL) {
-        this.secret = secret;
-        this.api_key = api_key;
-        this.context = context;
-        this.prefs = context.getSharedPreferences(OPENi_PUBLIC_PREFERENCES, Context.MODE_PRIVATE);
+    private OPENiAsync(String api_key, String secret, Context context, boolean cacheToken, boolean ignoreSSL) {
+        this.secret     = secret;
+        this.api_key    = api_key;
+        this.context    = context;
+        this.cacheToken = cacheToken;
+        this.prefs      = context.getSharedPreferences(OPENi_PUBLIC_PREFERENCES, Context.MODE_PRIVATE);
 
 
         this.authorizeApi   = new AuthorizationsApi();
@@ -86,10 +89,10 @@ public final class OPENiAsync {
         this.permissionsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
     }
 
-    public static void init(String api_key, String secret, Context context, boolean ignoreSSL) {
+    public static void init(String api_key, String secret, Context context, boolean cacheToken, boolean ignoreSSL) {
 
         if (null == openiAsync) {
-            openiAsync = new OPENiAsync(api_key, secret, context, ignoreSSL);
+            openiAsync = new OPENiAsync(api_key, secret, context, cacheToken, ignoreSSL);
         }
 
     }
@@ -203,23 +206,26 @@ public final class OPENiAsync {
             Log.e(TAG, "show dialog = " + url);
             Log.e(TAG, "show dialog = " + URI.equals(url));
 
-
-            if (URI.equals(url) || url.contains("data:text/html,chromewebdata")) {
-               Log.e(TAG, "show dialog = " + url);
-               auth_dialog.show();
-            }
-            else if (url.contains("?OUST=") && url.startsWith("http://localhost") && authComplete != true) {
+            if (url.contains("?OUST=") && url.startsWith("http://localhost") && authComplete != true) {
                final Uri uri = Uri.parse(url);
                authCode = uri.getQueryParameter("OUST");
 
-               setPref(OPENi_PREFERENCE_TOKEN, authCode);
+               if (!cacheToken){
+                  tmpToken = authCode;
+               }
+               else {
+                  setPref(OPENi_PREFERENCE_TOKEN, authCode);
+               }
                Log.i(TAG, "CODE : " + authCode);
                authComplete = true;
                authTokenResponse.onSuccess(authCode);
                auth_dialog.dismiss();
-            } else {
-               //auth_dialog.dismiss();
-               //authTokenResponse.onFailure("error");
+            }
+            else if (URI.equals(url) || url.contains("data:text/html,chromewebdata")) {
+               Log.e(TAG, "show dialog = " + url);
+               if (!authComplete){
+                  auth_dialog.show();
+               }
             }
          }
       });
@@ -246,6 +252,13 @@ public final class OPENiAsync {
 
     public String getPref(String key) {
 
+       if (!cacheToken){
+          if (null != tmpToken){
+             return tmpToken;
+          }
+          return OPENi_PREFERENCE_MISSING;
+       }
+
         Log.d(TAG, this.prefs.getAll().toString());
         return this.prefs.getString(key, OPENi_PREFERENCE_MISSING);
     }
@@ -253,6 +266,9 @@ public final class OPENiAsync {
     public Boolean getPrefBool(String key) {
 
         Log.d(TAG, this.prefs.getAll().toString());
+       if (!cacheToken){
+          return true;
+       }
         return this.prefs.getBoolean(key, true);
     }
 
@@ -274,6 +290,7 @@ public final class OPENiAsync {
          // TODO: get server ip dynamically
          final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");
          web.loadUrl(basePathURL +  "/auth/logout");
+
          web.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -364,10 +381,10 @@ public final class OPENiAsync {
    }
 
 
-   public void getCloudletObjects(final Integer offset, final Integer limit, final String type,
-                                  final Boolean id_only, final String with_property,
-                                  final String property_filter, final String only_show_properties,
-                                  final ICloudletObjectsCall iCloudletObjectsCall) {
+   public void listCloudletObjects(final Integer offset, final Integer limit, final String type,
+                                   final Boolean id_only, final String with_property,
+                                   final String property_filter, final String only_show_properties,
+                                   final ICloudletObjectsCall iCloudletObjectsCall) {
 
       openiConnect(new IAuthTokenResponse() {
          @Override
