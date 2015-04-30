@@ -6,9 +6,7 @@ import eu.openiict.client.model.ObjectResponse;
 /**
  * Created by dmccarthy on 16/11/14.
  */
-public interface ICreateCloudletObjectResult<ProcessObject> {
-
-    public ProcessObject doProcess(String authToken) throws ApiException;
+public interface ICreateCloudletObjectResult {
 
     public void onSuccess(ObjectResponse createObjResp);
 

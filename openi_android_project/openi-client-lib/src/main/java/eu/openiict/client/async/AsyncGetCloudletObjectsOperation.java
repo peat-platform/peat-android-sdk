@@ -15,8 +15,8 @@ import eu.openiict.client.model.OPENiObjectList;
  */
 public class AsyncGetCloudletObjectsOperation extends AsyncTask<String, Void, OPENiObjectList> {
 
-    private int    offset;
-    private int    limit;
+    private Integer offset;
+    private Integer limit;
     private String type;
     private String auth;
     private boolean id_only;

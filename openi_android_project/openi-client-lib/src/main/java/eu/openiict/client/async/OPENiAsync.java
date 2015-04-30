@@ -4,21 +4,26 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import eu.openiict.client.R;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.security.SecureClassLoader;
+import java.util.Date;
+
 import eu.openiict.client.api.AuthorizationsApi;
 import eu.openiict.client.api.CloudletsApi;
 import eu.openiict.client.api.ObjectsApi;
@@ -33,12 +38,13 @@ import eu.openiict.client.async.models.IOPENiAPiCall;
 import eu.openiict.client.async.models.ISearchCloudletsResults;
 import eu.openiict.client.async.models.ISearchOneCloudletResults;
 import eu.openiict.client.model.OPENiObject;
+import eu.openiict.client.utils.OPENiUtils;
 
 
 /**
  * Created by dmccarthy on 14/11/14.
  */
-public class OPENiAsync {
+public final class OPENiAsync {
 
     private static final String TAG = "OPENiAsync";
 
@@ -100,129 +106,130 @@ public class OPENiAsync {
     }
 
 
-    private void openAuthDialog(final IAuthTokenResponse authTokenResponse) {
 
+   private void openAuthDialog(final IAuthTokenResponse authTokenResponse) {
 
-        final Dialog auth_dialog = new Dialog(context, R.style.full_screen_dialog){
-           @Override
-           protected void onCreate(Bundle savedInstanceState) {
-              super.onCreate(savedInstanceState);
-              setContentView(R.layout.auth_dialog);
-              getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,
-                    WindowManager.LayoutParams.FILL_PARENT);
-           }
-        };
+      final Dialog auth_dialog = new Dialog(context, eu.openiict.client.R.style.full_screen_dialog){
+         @Override
+         protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(eu.openiict.client.R.layout.auth_dialog);
+            getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,
+                  WindowManager.LayoutParams.FILL_PARENT);
+         }
+      };
 
-        auth_dialog.setContentView(R.layout.auth_dialog);
+      auth_dialog.show();
 
-        final WebView web = (WebView) auth_dialog.findViewById(R.id.webv);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            WebView.setWebContentsDebuggingEnabled(true);
-//        }
+      final WebView web = (WebView) auth_dialog.findViewById(eu.openiict.client.R.id.webv);
 
-        if (Build.VERSION.SDK_INT >= 19) {
-          web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
-        else {
-          web.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
+      if (Build.VERSION.SDK_INT >= 19) {
+         web.setWebContentsDebuggingEnabled(true);
+         web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+      }
+      else {
+         web.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+      }
 
-        web.getSettings().setJavaScriptEnabled(true);
-        web.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        // TODO: get server ip dynamically
+      web.getSettings().setJavaScriptEnabled(true);
+      // TODO: get server ip dynamically
 
-        //final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "").replaceAll("https:", "http:");
-        final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "") ;
-        final String URI        = basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost";
+      //final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "").replaceAll("https:", "http:");
+      final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "") ;
+      //final String basePathURL = "https://demo2.openi-ict.eu";
+      //final String URI        = basePathURL + "/auth/account?api_key=" + OPENI_API_KEY + "&secret=" + OPENI_SECRET_KEY + "&redirectURL=" + "http://localhost";
 
-        web.setWebViewClient(new WebViewClient() {
+      final String URI        = basePathURL + "/auth/account?api_key=" + api_key + "&secret=" + secret + "&redirectURL=" + "http://localhost";
 
-           boolean authComplete = false;
-           //Intent resultIntent = new Intent();
-           String authCode;
+      web.setWebViewClient(new WebViewClient() {
 
-           @Override
-           public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-              super.onReceivedSslError(view, handler, error);
-              handler.proceed();
+         boolean authComplete = false;
+         //Intent resultIntent = new Intent();
+         String authCode;
 
-              Log.d(TAG, "SSL Error " + handler.toString());
-              Log.d(TAG, "SSL Error " + error.toString());
-           }
+         @Override
+         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
-           @Override
-           public void onPageStarted(WebView view, String url, Bitmap favicon) {
-              Log.e(TAG, "onPageStarted = " + url);
-              super.onPageStarted(view, url, favicon);
-           }
+            handler.proceed();
 
-           @Override
-           public void onReceivedError(WebView view, int errorCode,
-                                       String description, String failingUrl) {
-              Log.e(TAG, "onReceivedError = " + errorCode);
-              Log.e(TAG, "onReceivedError = " + description);
-              Log.e(TAG, "onReceivedError = " + failingUrl);
+            Log.d(TAG, "SSL Error " + handler.toString());
+            Log.d(TAG, "SSL Error " + error.toString());
+         }
 
-              //404 : error code for Page Not found
-              if (errorCode == -2) {
-                 authTokenResponse.onFailure("error");
-              }
-              else if (failingUrl.contains("ERROR=error_cancelled")) {
-                 Log.i(TAG, "USER_CANCELLED_HERE");
-                 //resultIntent.putExtra("code", authCode);
-                 authComplete = true;
+         @Override
+         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            Log.e(TAG, "onPageStarted = " + url);
+            super.onPageStarted(view, url, favicon);
+         }
+
+         @Override
+         public void onReceivedError(WebView view, int errorCode,
+                                     String description, String failingUrl) {
+            Log.e(TAG, "onReceivedError = " + errorCode);
+            Log.e(TAG, "onReceivedError = " + description);
+            Log.e(TAG, "onReceivedError = " + failingUrl);
+
+            //404 : error code for Page Not found
+            if (errorCode == -2) {
+               authTokenResponse.onFailure("error");
+            }
+            else if (failingUrl.contains("ERROR=error_cancelled")) {
+               Log.i(TAG, "USER_CANCELLED_HERE");
+               //resultIntent.putExtra("code", authCode);
+               authComplete = true;
                    /*this.setResult(Activity.RESULT_CANCELED, resultIntent);*/
-                 //Toast.makeText(context, "Error Occured", Toast.LENGTH_SHORT).show();
-                 authTokenResponse.onAppPermsCancelled("App Permissions Cancelled");
-                 auth_dialog.dismiss();
-              }
-              else if (failingUrl.contains("ERROR=error_permissions")) {
-                 Log.i(TAG, "ACCESS_DENIED_HERE");
-                 //resultIntent.putExtra("code", authCode);
-                 authComplete = true;
+               //Toast.makeText(context, "Error Occured", Toast.LENGTH_SHORT).show();
+               authTokenResponse.onAppPermsCancelled("App Permissions Cancelled");
+               auth_dialog.dismiss();
+            }
+            else if (failingUrl.contains("ERROR=error_permissions")) {
+               Log.i(TAG, "ACCESS_DENIED_HERE");
+               //resultIntent.putExtra("code", authCode);
+               authComplete = true;
                    /*this.setResult(Activity.RESULT_CANCELED, resultIntent);*/
-                 //Toast.makeText(context, "Error Occured", Toast.LENGTH_SHORT).show();
-                 authTokenResponse.onAppPermsDenied("App Permissions Denied");
-                 auth_dialog.dismiss();
-              }
-           }
-
-           @Override
-           public void onPageFinished(WebView view, String url) {
-              Log.e(TAG, "onPageFinished = " + url);
-              super.onPageFinished(view, url);
-              //auth_dialog.show();
-              Log.e(TAG, "show dialog = " + URI);
-              Log.e(TAG, "show dialog = " + url);
-              Log.e(TAG, "show dialog = " + URI.equals(url));
+               //Toast.makeText(context, "Error Occured", Toast.LENGTH_SHORT).show();
+               authTokenResponse.onAppPermsDenied("App Permissions Denied");
+               auth_dialog.dismiss();
+            }
+         }
 
 
-              if (URI.equals(url) || url.contains("data:text/html,chromewebdata")) {
-                 Log.e(TAG, "show dialog = " + url);
-                 auth_dialog.show();
-              }
-              else if (url.contains("?OUST=") && url.startsWith("http://localhost") && authComplete != true) {
-                 final Uri uri = Uri.parse(url);
-                 authCode = uri.getQueryParameter("OUST");
+         @Override
+         public void onPageFinished(WebView view, String url) {
+            Log.e(TAG, "onPageFinished = " + url);
+            super.onPageFinished(view, url);
+            //auth_dialog.show();
+            Log.e(TAG, "show dialog = " + URI);
+            Log.e(TAG, "show dialog = " + url);
+            Log.e(TAG, "show dialog = " + URI.equals(url));
 
-                 setPref(OPENi_PREFERENCE_TOKEN, authCode);
-                 Log.i(TAG, "CODE : " + authCode);
-                 authComplete = true;
-                 authTokenResponse.onSuccess(authCode);
-                 auth_dialog.dismiss();
-              }
-              else {
-                 //auth_dialog.dismiss();
-                 //authTokenResponse.onFailure("error");
-              }
-           }
-        });
 
-       web.loadUrl(URI);
+            if (URI.equals(url) || url.contains("data:text/html,chromewebdata")) {
+               Log.e(TAG, "show dialog = " + url);
+               auth_dialog.show();
+            }
+            else if (url.contains("?OUST=") && url.startsWith("http://localhost") && authComplete != true) {
+               final Uri uri = Uri.parse(url);
+               authCode = uri.getQueryParameter("OUST");
 
-       Log.d(TAG, URI);
-        auth_dialog.setTitle("OPENi");
-    }
+               setPref(OPENi_PREFERENCE_TOKEN, authCode);
+               Log.i(TAG, "CODE : " + authCode);
+               authComplete = true;
+               authTokenResponse.onSuccess(authCode);
+               auth_dialog.dismiss();
+            } else {
+               //auth_dialog.dismiss();
+               //authTokenResponse.onFailure("error");
+            }
+         }
+      });
+
+      web.setBackgroundColor(Color.parseColor("#323234"));
+
+      web.loadUrl(URI);
+
+      Log.d(TAG, URI);
+   }
 
 
     public void setPref(String key, String value) {
@@ -257,12 +264,12 @@ public class OPENiAsync {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            WebView.setWebContentsDebuggingEnabled(true);
 //        }
-       if (Build.VERSION.SDK_INT >= 19) {
-          web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-       }
-       else {
-          web.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-       }
+//       if (Build.VERSION.SDK_INT >= 19) {
+//          web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//       }
+//       else {
+//          web.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//       }
          web.getSettings().setJavaScriptEnabled(true);
          // TODO: get server ip dynamically
          final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");
@@ -297,6 +304,7 @@ public class OPENiAsync {
                 Toast.makeText(context, "Logged Out", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 
@@ -359,13 +367,13 @@ public class OPENiAsync {
    public void getCloudletObjects(final Integer offset, final Integer limit, final String type,
                                   final Boolean id_only, final String with_property,
                                   final String property_filter, final String only_show_properties,
-                                  final String auth, final ICloudletObjectsCall iCloudletObjectsCall) {
+                                  final ICloudletObjectsCall iCloudletObjectsCall) {
 
       openiConnect(new IAuthTokenResponse() {
          @Override
          public void onSuccess(String authToken) {
             new AsyncGetCloudletObjectsOperation(objectsApi, offset, limit, type, id_only,
-                  with_property, property_filter, only_show_properties, auth,
+                  with_property, property_filter, only_show_properties, authToken,
                   iCloudletObjectsCall).execute();
          }
 
@@ -410,63 +418,88 @@ public class OPENiAsync {
         });
     }
 
-    public void checkTokenValidity(final ICloudletIdResponse iTokenValidity) {
+   public boolean isTokenValid(String prefTokenValue) {
 
-        final String prefTokenValue = getPref(OPENi_PREFERENCE_TOKEN);
-        new AsyncGetCloudletOperation(cloudletsApi, prefTokenValue, iTokenValidity).execute();
+      try {
+//         Log.d(TAG, "prefTokenValue " + prefTokenValue);
+//         Log.d(TAG, "prefTokenValue " + prefTokenValue.split("\\."));
+//         Log.d(TAG, "(prefTokenValue.split(\".\"))[1] " + (prefTokenValue.split("\\."))[1]);
 
-    }
+         final byte[] data = Base64.decode((prefTokenValue.split("\\."))[1]);
+         final String text = new String(data, "UTF-8");
 
-    public void openiConnect(final IAuthTokenResponse authTokenResponse) {
+//         Log.d(TAG, "text " + text);
 
-        final String prefTokenValue = getPref(OPENi_PREFERENCE_TOKEN);
-        Log.d(TAG, "" + prefTokenValue);
+         final JSONObject jo = new JSONObject(text);
 
-        if (OPENi_PREFERENCE_MISSING.equals(prefTokenValue)) {
-            Log.d(TAG, "token not in prefs");
-            //kick off login process
+//         Log.d(TAG, "jo " + jo);
+
+         final long expTime = jo.getLong("exp");
+//         Log.d(TAG, "expTime " + expTime);
+//         Log.d(TAG, "deviceT " + System.currentTimeMillis()/1000);
+
+         if (expTime >= System.currentTimeMillis()/1000){
+            return true;
+         }
+
+         return false;
+      }
+      catch (UnsupportedEncodingException e) {
+         e.printStackTrace();
+         return false;
+      }
+      catch (JSONException e) {
+         e.printStackTrace();
+         return false;
+      }
+   }
+
+
+   private void openiConnect(final IAuthTokenResponse authTokenResponse) {
+
+      final String prefTokenValue = getPref(OPENi_PREFERENCE_TOKEN);
+      Log.d(TAG, "" + prefTokenValue);
+
+      if (OPENi_PREFERENCE_MISSING.equals(prefTokenValue)) {
+         Log.d(TAG, "token not in prefs");
+         //kick off login process
+         openAuthDialog(authTokenResponse); // TODO : open AuthMainActitity
+      } else {
+         Log.d(TAG, "token in prefs");
+
+         if (isTokenValid(prefTokenValue)){
+            Log.d(TAG, "Valid Token, proceed: " );
+            authTokenResponse.onSuccess(prefTokenValue);
+         }
+         else {
             openAuthDialog(authTokenResponse); // TODO : open AuthMainActitity
-        } else {
-            Log.d(TAG, "token in prefs");
-            // check token validity TODO use timestamps too
-            checkTokenValidity(new ICloudletIdResponse() {
-                @Override
-                public void onSuccess(String cloudletid) {
-                    Log.d(TAG, "Got cloudletid: " + cloudletid);
-                    authTokenResponse.onSuccess(prefTokenValue);
-                }
+         }
+      }
+   }
 
-                @Override
-                public void onFailure() {
-                    Log.d(TAG, "Not valid token in prefs");
-                    openAuthDialog(authTokenResponse); // TODO : open AuthMainActitity
-                }
-            });
-        }
-    }
 
     public void searchInAllCloudlets(final String with_property, final String property_filter, final String type, final Boolean id_only, final String offset, final String limit, final ISearchCloudletsResults searchCloudletsResults) {
 
         openiConnect(new IAuthTokenResponse() {
-            @Override
-            public void onSuccess(String authToken) {
-                new AsyncSearchCloudletsOperation(searchApi, with_property, property_filter, type, id_only, offset, limit, authToken, searchCloudletsResults).execute();
-            }
+           @Override
+           public void onSuccess(String authToken) {
+              new AsyncSearchCloudletsOperation(searchApi, with_property, property_filter, type, id_only, offset, limit, authToken, searchCloudletsResults).execute();
+           }
 
-            @Override
-            public void onAppPermsCancelled(String perms) {
-               Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
-            }
+           @Override
+           public void onAppPermsCancelled(String perms) {
+              Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
+           }
 
-            @Override
-            public void onAppPermsDenied(String error) {
-                searchCloudletsResults.onFailure();
-            }
+           @Override
+           public void onAppPermsDenied(String error) {
+              searchCloudletsResults.onFailure();
+           }
 
-            @Override
-            public void onFailure(String error) {
-                searchCloudletsResults.onFailure();
-            }
+           @Override
+           public void onFailure(String error) {
+              searchCloudletsResults.onFailure();
+           }
         });
     }
 
@@ -496,16 +529,50 @@ public class OPENiAsync {
     }
 
 
-    public void createCloudletObj(final String cloudletID, final OPENiObject objectBody, final ICreateCloudletObjectResult IcreateCloudletObject) {
+   public void createCloudletObj(final String typeId, final JSONObject jo, final ICreateCloudletObjectResult IcreateCloudletObject) {
+      openiConnect(new IAuthTokenResponse() {
+         @Override
+         public void onSuccess(String authToken) {
+            Log.d(TAG, "Create Object");
+            final OPENiObject oo = new OPENiObject();
+            oo.setOpeniType(typeId);
+            try {
+               oo.setData(OPENiUtils.jsonObjectToMap(jo));
+               new AsyncCreateCloudletObjectOperation(objectsApi, oo, authToken, IcreateCloudletObject).execute();
+            } catch (JSONException e) {
+              onFailure(e.getMessage());
+            }
+         }
+
+         @Override
+         public void onAppPermsCancelled(String perms) {
+            Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG).show();
+         }
+
+         @Override
+         public void onAppPermsDenied(String error) {
+            IcreateCloudletObject.onFailure();
+         }
+
+         @Override
+         public void onFailure(String error) {
+            IcreateCloudletObject.onFailure();
+         }
+      });
+   }
+
+
+    public void createCloudletObj(final OPENiObject objectBody, final ICreateCloudletObjectResult IcreateCloudletObject) {
         openiConnect(new IAuthTokenResponse() {
             @Override
             public void onSuccess(String authToken) {
-                new AsyncCreateCloudletObjectOperation(objectsApi, cloudletID, objectBody, authToken, IcreateCloudletObject);
+                Log.d(TAG, "Create Object");
+                new AsyncCreateCloudletObjectOperation(objectsApi, objectBody, authToken, IcreateCloudletObject).execute();
             }
 
             @Override
             public void onAppPermsCancelled(String perms) {
-              Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
+              Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG).show();
             }
 
             @Override

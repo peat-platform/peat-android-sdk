@@ -13,11 +13,16 @@ import eu.openiict.client.model.OPENiObjectList;
  */
 public class AsyncGetSearchCloudletsOperation extends AsyncTask<String, Void, OPENiObjectList> {
 
+    private static final String TAG = "AsyncSearchCloudlets";
+
     private SearchApi searchApi;
     private String token;
     private ISearchCloudletsResults iSearchResponse;
-    String with_property, property_filter, type, offset, limit;
-    Boolean id_only;
+    private String with_property;
+    private String property_filter;
+    private String type, offset;
+    private String limit;
+    private Boolean id_only;
 
     public AsyncGetSearchCloudletsOperation(SearchApi searchApi, String with_property, String property_filter, String type, Boolean id_only, String offset, String limit, String token, ISearchCloudletsResults searchResponse) {
         this.searchApi = searchApi;
@@ -36,13 +41,13 @@ public class AsyncGetSearchCloudletsOperation extends AsyncTask<String, Void, OP
     @Override
     protected OPENiObjectList doInBackground(String... params) {
 
-        Log.d("AsyncGetCloudletOperation", token);
+        Log.d(TAG, token);
 
         try {
             //Boolean id_only = true;
             return searchApi.search(with_property, property_filter, type, id_only, offset, limit, token);
         } catch (ApiException e) {
-            Log.d("AsyncGetCloudletOperation", e.toString());
+            Log.d(TAG, e.toString());
             return null;
         }
 
@@ -57,7 +62,7 @@ public class AsyncGetSearchCloudletsOperation extends AsyncTask<String, Void, OP
             iSearchResponse.onFailure();
         } else {
             try {
-                Log.d("AsyncGetSearchCloudletsOperation", "cloudlet " + searchResults.toString());
+                Log.d(TAG, "cloudlet " + searchResults.toString());
                 iSearchResponse.onSuccess(searchResults);
             } catch (Exception e) {
                 iSearchResponse.onFailure();

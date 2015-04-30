@@ -10,8 +10,17 @@ import eu.openiict.client.api.SearchApi;
 import eu.openiict.client.api.SubscriptionApi;
 import eu.openiict.client.api.TypesApi;
 import eu.openiict.client.model.OPENiObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -233,5 +242,52 @@ public class OPENiUtils {
       
       return (null == oObj.getData()) ? null : new JSONObject( oObj.getData() );
       
+   }
+
+
+   public static Map<String, Object> jsonObjectToMap(JSONObject json) throws JSONException {
+      final Map<String, Object> retMap = new HashMap<String, Object>();
+
+      if(json != JSONObject.NULL) {
+         return toMap(json);
+      }
+
+      return retMap;
+   }
+
+   private static Map<String, Object> toMap(JSONObject object) throws JSONException {
+      final Map<String, Object> map = new HashMap<String, Object>();
+
+      final Iterator<String> keysItr = object.keys();
+      while(keysItr.hasNext()) {
+         final String key = keysItr.next();
+         Object value     = object.get(key);
+
+         if(value instanceof JSONArray) {
+            value = toList((JSONArray) value);
+         }
+
+         else if(value instanceof JSONObject) {
+            value = toMap((JSONObject) value);
+         }
+         map.put(key, value);
+      }
+      return map;
+   }
+
+   private static List<Object> toList(JSONArray array) throws JSONException {
+      final List<Object> list = new ArrayList<Object>();
+      for(int i = 0; i < array.length(); i++) {
+         Object value = array.get(i);
+         if(value instanceof JSONArray) {
+            value = toList((JSONArray) value);
+         }
+
+         else if(value instanceof JSONObject) {
+            value = toMap((JSONObject) value);
+         }
+         list.add(value);
+      }
+      return list;
    }
 }

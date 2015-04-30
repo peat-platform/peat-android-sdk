@@ -14,32 +14,31 @@ import eu.openiict.client.model.ObjectResponse;
  */
 public class AsyncCreateCloudletObjectOperation extends AsyncTask<String, Void, ObjectResponse> {
 
-    String cloudletID;
-    OPENiObject objectBody;
-    private ObjectsApi objectsApi;
-    private String token;
+    private static final String TAG = "AsyncCreateCloudlet";
+
+    private OPENiObject objectBody;
+    private ObjectsApi  objectsApi;
+    private String      token;
     private ICreateCloudletObjectResult IcreateObjectResult;
 
-    public AsyncCreateCloudletObjectOperation(ObjectsApi objectsApi, String cloudletID, OPENiObject objectBody,  String token, ICreateCloudletObjectResult IcreateObjectResult) {
+    public AsyncCreateCloudletObjectOperation(ObjectsApi objectsApi, OPENiObject objectBody,  String token, ICreateCloudletObjectResult IcreateObjectResult) {
         this.objectsApi = objectsApi;
-        this.cloudletID = cloudletID;
         this.objectBody = objectBody;
-        this.token = token;
+        this.token      = token;
 
         this.IcreateObjectResult = IcreateObjectResult;
-
     }
 
 
     @Override
     protected ObjectResponse doInBackground(String... params) {
 
-        Log.d("AsyncCreateCloudletObjectOperation", token);
+        Log.d(TAG, token);
 
         try {
-            return objectsApi.createObject(cloudletID, objectBody, token);
+            return objectsApi.createObjectWithAuth(objectBody, token);
         } catch (ApiException e) {
-            Log.d("AsyncCreateCloudletObjectOperation", e.toString());
+            Log.d(TAG, e.toString());
             return null;
         }
 
@@ -54,7 +53,7 @@ public class AsyncCreateCloudletObjectOperation extends AsyncTask<String, Void, 
             IcreateObjectResult.onFailure();
         } else {
             try {
-                Log.d("AsyncCreateCloudletObjectOperation", "create object results: " + objectResponse.toString());
+                Log.d(TAG, "create object results: " + objectResponse.toString());
                 IcreateObjectResult.onSuccess(objectResponse);
             } catch (Exception e) {
                 IcreateObjectResult.onFailure();

@@ -9,8 +9,6 @@ import eu.openiict.client.model.OPENiObjectList;
  */
 public interface ICloudletObjectsCall<ProcessObject> {
 
-    public ProcessObject doProcess(String authToken) throws ApiException;
-
     public void onSuccess(OPENiObjectList openiObjectList);
 
     public void onFailure();
