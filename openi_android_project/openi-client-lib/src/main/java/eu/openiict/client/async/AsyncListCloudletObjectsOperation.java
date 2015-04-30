@@ -4,16 +4,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import eu.openiict.client.api.ObjectsApi;
-import eu.openiict.client.async.models.ICloudletObjectCall;
-import eu.openiict.client.async.models.ICloudletObjectsCall;
+import eu.openiict.client.async.models.IListObjectsResponse;
 import eu.openiict.client.common.ApiException;
-import eu.openiict.client.model.OPENiObject;
 import eu.openiict.client.model.OPENiObjectList;
 
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncGetCloudletObjectsOperation extends AsyncTask<String, Void, OPENiObjectList> {
+public class AsyncListCloudletObjectsOperation extends AsyncTask<String, Void, OPENiObjectList> {
 
     private Integer offset;
     private Integer limit;
@@ -23,12 +21,13 @@ public class AsyncGetCloudletObjectsOperation extends AsyncTask<String, Void, OP
     private String with_property;
     private String property_filter;
     private String only_show_properties;
-    private ICloudletObjectsCall iCloudletObjectsCall;
+    private String order;
+    private IListObjectsResponse iListObjectsResponse;
 
     private ObjectsApi objectsApi;
 
 
-    public AsyncGetCloudletObjectsOperation(ObjectsApi objectsApi, Integer offset, Integer limit, String type, Boolean id_only, String with_property, String property_filter, String only_show_properties,  String auth, ICloudletObjectsCall iCloudletObjectsCall) {
+    public AsyncListCloudletObjectsOperation(ObjectsApi objectsApi, Integer offset, Integer limit, String type, Boolean id_only, String with_property, String property_filter, String only_show_properties, String auth, String order, IListObjectsResponse iListObjectsResponse) {
         this.offset               = offset;
         this.limit                = limit;
         this.auth                 = auth;
@@ -38,7 +37,8 @@ public class AsyncGetCloudletObjectsOperation extends AsyncTask<String, Void, OP
         this.property_filter      = property_filter;
         this.only_show_properties = only_show_properties;
         this.objectsApi           = objectsApi;
-        this.iCloudletObjectsCall = iCloudletObjectsCall;
+        this.order                = order;
+        this.iListObjectsResponse = iListObjectsResponse;
     }
 
 
@@ -46,7 +46,7 @@ public class AsyncGetCloudletObjectsOperation extends AsyncTask<String, Void, OP
     protected OPENiObjectList doInBackground(String... params) {
 
         try {
-            return objectsApi.getObjectsWithAuthToken(offset, limit, type, id_only, with_property, property_filter, only_show_properties, auth);
+            return objectsApi.listObjectsWithAuthToken(offset, limit, type, id_only, with_property, property_filter, only_show_properties, auth, order);
         } catch (ApiException e) {
             Log.d("AsyncGetCloudletOper", e.toString());
             return null;
@@ -63,9 +63,9 @@ public class AsyncGetCloudletObjectsOperation extends AsyncTask<String, Void, OP
         Log.d("AsyncGetCloudletObje", "" + o);
 
         if (null == o) {
-            iCloudletObjectsCall.onFailure();
+            iListObjectsResponse.onFailure();
         } else {
-            iCloudletObjectsCall.onSuccess(o);
+            iListObjectsResponse.onSuccess(o);
         }
     }
 }

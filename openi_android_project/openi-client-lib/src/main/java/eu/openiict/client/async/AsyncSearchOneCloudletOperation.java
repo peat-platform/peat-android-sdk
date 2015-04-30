@@ -43,7 +43,7 @@ public class AsyncSearchOneCloudletOperation extends AsyncTask<String, Void, OPE
 
         try {
             //Boolean id_only = true;
-            return searchApi.getObjects(cloudletID, offset, limit, type, id_only, with_property, property_filter, only_show_properties, token);
+            return searchApi.listObjects(cloudletID, offset, limit, type, id_only, with_property, property_filter, only_show_properties, token);
         } catch (ApiException e) {
             Log.d("AsyncSearchOneCloudletOperation", e.toString());
             return null;

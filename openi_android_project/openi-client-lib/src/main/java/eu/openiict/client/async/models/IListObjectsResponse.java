@@ -7,7 +7,7 @@ import eu.openiict.client.model.OPENiObjectList;
 /**
  * Created by dmccarthy on 16/11/14.
  */
-public interface ICloudletObjectsCall<ProcessObject> {
+public interface IListObjectsResponse<ProcessObject> {
 
     public void onSuccess(OPENiObjectList openiObjectList);
 

@@ -21,8 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.security.SecureClassLoader;
-import java.util.Date;
 
 import eu.openiict.client.api.AuthorizationsApi;
 import eu.openiict.client.api.CloudletsApi;
@@ -31,8 +29,8 @@ import eu.openiict.client.api.PermissionsApi;
 import eu.openiict.client.api.SearchApi;
 import eu.openiict.client.async.models.IAuthTokenResponse;
 import eu.openiict.client.async.models.ICloudletIdResponse;
-import eu.openiict.client.async.models.ICloudletObjectCall;
-import eu.openiict.client.async.models.ICloudletObjectsCall;
+import eu.openiict.client.async.models.ICloudletObjectResponse;
+import eu.openiict.client.async.models.IListObjectsResponse;
 import eu.openiict.client.async.models.ICreateCloudletObjectResult;
 import eu.openiict.client.async.models.IOPENiAPiCall;
 import eu.openiict.client.async.models.ISearchCloudletsResults;
@@ -325,12 +323,12 @@ public final class OPENiAsync {
     }
 
 
-   public void getCloudletObject(final String cloudletId, final String objectid, final ICloudletObjectCall iCloudletObjectCall) {
+   public void getCloudletObject(final String cloudletId, final String objectid, final ICloudletObjectResponse iCloudletObjectResponse) {
 
       openiConnect(new IAuthTokenResponse() {
          @Override
          public void onSuccess(String authToken) {
-            new AsyncGetCloudletObjectOperation(objectsApi, cloudletId, objectid, true, authToken, iCloudletObjectCall).execute();
+            new AsyncGetCloudletObjectOperation(objectsApi, cloudletId, objectid, true, authToken, iCloudletObjectResponse).execute();
          }
 
 
@@ -347,34 +345,63 @@ public final class OPENiAsync {
 
          @Override
          public void onFailure(String error) {
-            iCloudletObjectCall.onFailure();
+            iCloudletObjectResponse.onFailure();
          }
       });
 
    }
 
-   public void getCloudletObject(final String objectid, final ICloudletObjectCall iCloudletObjectCall) {
+
+   public void getLatestObject(final String type, final ICloudletObjectResponse iCloudletObjectResponse) {
 
       openiConnect(new IAuthTokenResponse() {
          @Override
          public void onSuccess(String authToken) {
-            new AsyncGetCloudletObjectOperation(objectsApi, objectid, true, authToken, iCloudletObjectCall).execute();
+            new AsyncGetLatestObjectOperation(objectsApi, type, authToken, iCloudletObjectResponse).execute();
          }
 
          @Override
          public void onAppPermsDenied(String error) {
-            iCloudletObjectCall.onFailure();
+            iCloudletObjectResponse.onFailure();
          }
 
          @Override
          public void onAppPermsCancelled(String perms) {
             Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
-            iCloudletObjectCall.onFailure();
+            iCloudletObjectResponse.onFailure();
          }
 
          @Override
          public void onFailure(String error) {
-            iCloudletObjectCall.onFailure();
+            iCloudletObjectResponse.onFailure();
+         }
+      });
+
+   }
+
+
+   public void getCloudletObject(final String objectid, final ICloudletObjectResponse iCloudletObjectResponse) {
+
+      openiConnect(new IAuthTokenResponse() {
+         @Override
+         public void onSuccess(String authToken) {
+            new AsyncGetCloudletObjectOperation(objectsApi, objectid, true, authToken, iCloudletObjectResponse).execute();
+         }
+
+         @Override
+         public void onAppPermsDenied(String error) {
+            iCloudletObjectResponse.onFailure();
+         }
+
+         @Override
+         public void onAppPermsCancelled(String perms) {
+            Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
+            iCloudletObjectResponse.onFailure();
+         }
+
+         @Override
+         public void onFailure(String error) {
+            iCloudletObjectResponse.onFailure();
          }
       });
 
@@ -384,19 +411,19 @@ public final class OPENiAsync {
    public void listCloudletObjects(final Integer offset, final Integer limit, final String type,
                                    final Boolean id_only, final String with_property,
                                    final String property_filter, final String only_show_properties,
-                                   final ICloudletObjectsCall iCloudletObjectsCall) {
+                                   final IListObjectsResponse iListObjectsResponse) {
 
       openiConnect(new IAuthTokenResponse() {
          @Override
          public void onSuccess(String authToken) {
-            new AsyncGetCloudletObjectsOperation(objectsApi, offset, limit, type, id_only,
-                  with_property, property_filter, only_show_properties, authToken,
-                  iCloudletObjectsCall).execute();
+            new AsyncListCloudletObjectsOperation(objectsApi, offset, limit, type, id_only,
+                  with_property, property_filter, only_show_properties, authToken, "ascending",
+                  iListObjectsResponse).execute();
          }
 
          @Override
          public void onAppPermsDenied(String error) {
-            iCloudletObjectsCall.onFailure();
+            iListObjectsResponse.onFailure();
          }
 
          @Override
@@ -406,7 +433,7 @@ public final class OPENiAsync {
 
          @Override
          public void onFailure(String error) {
-            iCloudletObjectsCall.onFailure();
+            iListObjectsResponse.onFailure();
          }
       });
 
@@ -434,6 +461,7 @@ public final class OPENiAsync {
            }
         });
     }
+
 
    public boolean isTokenValid(String prefTokenValue) {
 

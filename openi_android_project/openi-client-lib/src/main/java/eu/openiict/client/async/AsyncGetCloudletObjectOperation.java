@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import eu.openiict.client.api.ObjectsApi;
-import eu.openiict.client.async.models.ICloudletObjectCall;
+import eu.openiict.client.async.models.ICloudletObjectResponse;
 import eu.openiict.client.common.ApiException;
 import eu.openiict.client.model.OPENiObject;
 
@@ -17,29 +17,29 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPE
     Boolean resolveObject;
     private String auth;
     private String cloudletId;
-    private ICloudletObjectCall iCloudletObjectCall;
+    private ICloudletObjectResponse iCloudletObjectResponse;
 
     private ObjectsApi objectsApi;
 
 
-    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String cloudletId, String objectId, Boolean resolveObject, String auth, ICloudletObjectCall iCloudletObjectCall) {
+    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String cloudletId, String objectId, Boolean resolveObject, String auth, ICloudletObjectResponse iCloudletObjectResponse) {
         this.auth = auth;
         this.cloudletId = cloudletId;
         this.objectId = objectId;
         this.resolveObject = resolveObject;
 
         this.objectsApi = objectsApi;
-        this.iCloudletObjectCall = iCloudletObjectCall;
+        this.iCloudletObjectResponse = iCloudletObjectResponse;
     }
 
 
-    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String objectId, Boolean resolveObject, String auth, ICloudletObjectCall iCloudletObjectCall) {
+    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String objectId, Boolean resolveObject, String auth, ICloudletObjectResponse iCloudletObjectResponse) {
         this.auth = auth;
         this.objectId = objectId;
         this.resolveObject = resolveObject;
 
         this.objectsApi = objectsApi;
-        this.iCloudletObjectCall = iCloudletObjectCall;
+        this.iCloudletObjectResponse = iCloudletObjectResponse;
     }
 
 
@@ -67,9 +67,9 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPE
         Log.d("AsyncGetCloudletObje", "" + o);
 
         if (null == o) {
-            iCloudletObjectCall.onFailure();
+            iCloudletObjectResponse.onFailure();
         } else {
-            iCloudletObjectCall.onSuccess(o);
+            iCloudletObjectResponse.onSuccess(o);
         }
     }
 }
