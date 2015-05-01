@@ -1,7 +1,9 @@
 package eu.openiict.client.async;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,13 +17,17 @@ import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import eu.openiict.client.R;
 import eu.openiict.client.api.AuthorizationsApi;
 import eu.openiict.client.api.CloudletsApi;
 import eu.openiict.client.api.ObjectsApi;
@@ -51,6 +57,7 @@ public final class OPENiAsync {
     private String  api_key;
     private String  secret;
     private boolean cacheToken;
+    private String  authCode;
     private volatile String tmpToken;
 
     private AuthorizationsApi authorizeApi;
@@ -66,13 +73,12 @@ public final class OPENiAsync {
 
     private SharedPreferences prefs;
 
-    private OPENiAsync(String api_key, String secret, Context context, boolean cacheToken, boolean ignoreSSL) {
+    private OPENiAsync(String api_key, String secret, Context context) {
+
         this.secret     = secret;
         this.api_key    = api_key;
         this.context    = context;
-        this.cacheToken = cacheToken;
         this.prefs      = context.getSharedPreferences(OPENi_PUBLIC_PREFERENCES, Context.MODE_PRIVATE);
-
 
         this.authorizeApi   = new AuthorizationsApi();
         this.cloudletsApi   = new CloudletsApi();
@@ -80,35 +86,107 @@ public final class OPENiAsync {
         this.objectsApi     = new ObjectsApi();
         this.permissionsApi = new PermissionsApi();
 
-        this.authorizeApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
-        this.cloudletsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
-        this.searchApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
-        this.objectsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
-        this.permissionsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
+        attachMenu(context);
     }
 
-    public static void init(String api_key, String secret, Context context, boolean cacheToken, boolean ignoreSSL) {
 
-        if (null == openiAsync) {
-            openiAsync = new OPENiAsync(api_key, secret, context, cacheToken, ignoreSSL);
-        }
+   public static OPENiAsync init(String api_key, String secret, Context context) {
+      if (null == openiAsync) {
+         openiAsync = new OPENiAsync(api_key, secret, context);
+      }
 
-    }
+      return openiAsync;
+   }
+
+
+   public void setIgnoreSSL(boolean ignoreSSL){
+
+      if (null == openiAsync){
+         throw new RuntimeException("OPENiAsync object hasn't been created, call init method first.");
+      }
+      this.authorizeApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
+      this.cloudletsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
+      this.searchApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
+      this.objectsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
+      this.permissionsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
+
+   }
+
+
+   public void setCacheToken(boolean cacheToken){
+
+      if (null == openiAsync){
+         throw new RuntimeException("OPENiAsync object hasn't been created, call init method first.");
+      }
+      this.cacheToken = cacheToken;
+
+   }
+
+
+   public void attachMenu(final Context activity) {
+
+      final SlidingMenu menu = new SlidingMenu(activity);
+      menu.setMode(SlidingMenu.LEFT);
+      menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+      menu.setFadeDegree(0.35f);
+      menu.attachToActivity((Activity) activity, SlidingMenu.SLIDING_CONTENT);
+      menu.setMenu(R.layout.menu);
+      menu.setSlidingEnabled(true);
+
+      final Button logout = (Button) menu.findViewById(R.id.logoutOfOPENi);
+
+      logout.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            OPENiAsync.instance(activity).logout();
+         }
+      });
+
+      final Button dash = (Button) menu.findViewById(R.id.openUserDash);
+
+      final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "") ;
+
+      dash.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(basePathURL + "/user/login"));
+            activity.startActivity(browserIntent);
+         }
+      });
+
+      final Button closeButton = (Button) menu.findViewById(R.id.closeOpeniMenu);
+
+      closeButton.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            menu.toggle();
+         }
+      });
+
+   }
+
 
     public static OPENiAsync instance(Context context) {
 
         if (null == openiAsync) {
-            throw new RuntimeException("OPENiAsync object hasn't been created, call initOPENiAsync(String clientId, Context context) first.");
+            throw new RuntimeException("OPENiAsync object hasn't been created, call init method first.");
         }
-        if (context != null) {
-           openiAsync.context = context;
-        }
+
+        openiAsync.context = context;
+
+        openiAsync.attachMenu((Activity) context);
+
         return openiAsync;
     }
 
 
 
    private void openAuthDialog(final IAuthTokenResponse authTokenResponse) {
+
+      if (null != authCode && isTokenValid(authCode)){
+         authTokenResponse.onSuccess(authCode);
+         return;
+      }
 
       final Dialog auth_dialog = new Dialog(context, eu.openiict.client.R.style.full_screen_dialog){
          @Override
@@ -146,7 +224,6 @@ public final class OPENiAsync {
 
          boolean authComplete = false;
          //Intent resultIntent = new Intent();
-         String authCode;
 
          @Override
          public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
