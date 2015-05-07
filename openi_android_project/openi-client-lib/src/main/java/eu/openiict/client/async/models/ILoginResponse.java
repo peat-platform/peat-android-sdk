@@ -7,6 +7,8 @@ public interface ILoginResponse {
 
     public void onSuccess(String authToken);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

@@ -3,6 +3,9 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.openiict.client.api.ObjectsApi;
 import eu.openiict.client.async.models.IListObjectsResponse;
 import eu.openiict.client.common.ApiException;
@@ -11,7 +14,7 @@ import eu.openiict.client.model.OPENiObjectList;
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncListCloudletObjectsOperation extends AsyncTask<String, Void, OPENiObjectList> {
+public class AsyncListCloudletObjectsOperation extends AsyncTask<String, Void, Object> {
 
     private Integer offset;
     private Integer limit;
@@ -43,29 +46,45 @@ public class AsyncListCloudletObjectsOperation extends AsyncTask<String, Void, O
 
 
     @Override
-    protected OPENiObjectList doInBackground(String... params) {
+    protected Object doInBackground(String... params) {
 
         try {
             return objectsApi.listObjectsWithAuthToken(offset, limit, type, id_only, with_property, property_filter, only_show_properties, auth, order);
         } catch (ApiException e) {
             Log.d("AsyncGetCloudletOper", e.toString());
-            return null;
+            return e;
         }
 
     }
 
 
     @Override
-    protected void onPostExecute(OPENiObjectList o) {
+    protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
         //Log.d("AsyncGetCloudletObjectOperation", "token " + auth.toString());
         Log.d("AsyncGetCloudletObje", "" + o);
 
         if (null == o) {
-            iListObjectsResponse.onFailure();
-        } else {
-            iListObjectsResponse.onSuccess(o);
+            iListObjectsResponse.onFailure("empty response");
+        }
+        else if( o instanceof ApiException){
+
+            try {
+                final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
+                if (null != jo.get("error") && jo.get("error").equals("permission denied")){
+                    iListObjectsResponse.onPermissionDenied();
+                }
+                else {
+                    iListObjectsResponse.onFailure(((ApiException) o).getMessage());
+                }
+            }
+            catch (JSONException e){
+                iListObjectsResponse.onFailure(((ApiException) o).getMessage());
+            }
+        }
+        else {
+            iListObjectsResponse.onSuccess((OPENiObjectList) o);
         }
     }
 }

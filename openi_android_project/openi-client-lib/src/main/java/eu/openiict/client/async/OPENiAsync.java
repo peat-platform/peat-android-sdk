@@ -56,7 +56,7 @@ public final class OPENiAsync {
     private Context context;
     private String  api_key;
     private String  secret;
-    private boolean cacheToken;
+    private boolean cacheToken = true;
     private String  authCode;
     private volatile String tmpToken;
 
@@ -138,7 +138,7 @@ public final class OPENiAsync {
       logout.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
-            OPENiAsync.instance(activity).logout();
+            logout();
          }
       });
 
@@ -183,7 +183,12 @@ public final class OPENiAsync {
 
    private void openAuthDialog(final IAuthTokenResponse authTokenResponse) {
 
+      Log.d(TAG, "Calling openAuthDialog ");
+      Log.d(TAG, "Calling openAuthDialog " + authCode);
+      Log.d(TAG, "Calling openAuthDialog " + isTokenValid(authCode));
+
       if (null != authCode && isTokenValid(authCode)){
+         Log.d(TAG, "Calling openAuthDialog In ");
          authTokenResponse.onSuccess(authCode);
          return;
       }
@@ -348,54 +353,63 @@ public final class OPENiAsync {
     }
 
     public void logout() {
+
+       final SharedPreferences.Editor edit = this.prefs.edit();
+       tmpToken = null;
+       authCode = null;
+       edit.remove(OPENi_PREFERENCE_TOKEN);
+       edit.commit();
+
+       Toast.makeText(context, "Logged Out", Toast.LENGTH_LONG);
+
         //final Dialog auth_dialog = new Dialog(context);
         //auth_dialog.setContentView(R.layout.auth_dialog);
-        final SharedPreferences.Editor edit = this.prefs.edit();
-        final WebView web = new WebView(context);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            WebView.setWebContentsDebuggingEnabled(true);
-//        }
-//       if (Build.VERSION.SDK_INT >= 19) {
-//          web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-//       }
-//       else {
-//          web.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-//       }
-         web.getSettings().setJavaScriptEnabled(true);
-         // TODO: get server ip dynamically
-         final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");
-         web.loadUrl(basePathURL +  "/auth/logout");
-
-         web.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed(); // Ignore SSL certificate errors
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode,
-                                        String description, String failingUrl) {
-                Log.e(TAG, "onReceivedError = " + errorCode);
-                //404 : error code for Page Not found
-                if (errorCode == -2) {
-                    Toast.makeText(context, "Error: Couldn't Log Out", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                edit.clear();
-                edit.commit();
-                Toast.makeText(context, "Logged Out", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        final SharedPreferences.Editor edit = this.prefs.edit();
+//        final WebView web = new WebView(context);
+////        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+////            WebView.setWebContentsDebuggingEnabled(true);
+////        }
+////       if (Build.VERSION.SDK_INT >= 19) {
+////          web.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+////       }
+////       else {
+////          web.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+////       }
+//         web.getSettings().setJavaScriptEnabled(true);
+//         // TODO: get server ip dynamically
+//         final String basePathURL = cloudletsApi.getBasePath().replace("/api/v1", "");
+//         web.loadUrl(basePathURL +  "/auth/logout");
+//
+//         web.setWebViewClient(new WebViewClient() {
+//
+//            @Override
+//            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//
+//                handler.proceed(); // Ignore SSL certificate errors
+//            }
+//
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                super.onPageStarted(view, url, favicon);
+//            }
+//
+//            @Override
+//            public void onReceivedError(WebView view, int errorCode,
+//                                        String description, String failingUrl) {
+//                Log.e(TAG, "onReceivedError = " + errorCode);
+//                //404 : error code for Page Not found
+//                if (errorCode == -2) {
+//                    Toast.makeText(context, "Error: Couldn't Log Out", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                //super.onPageFinished(view, url);
+//               Log.d(TAG, "onPageFinished");
+//                Toast.makeText(context, "Logged Out", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
@@ -411,6 +425,7 @@ public final class OPENiAsync {
 
          @Override
          public void onAppPermsDenied(String error) {
+            iCloudletObjectResponse.onPermissionDenied();
          }
 
 
@@ -422,7 +437,7 @@ public final class OPENiAsync {
 
          @Override
          public void onFailure(String error) {
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onFailure(error);
          }
       });
 
@@ -439,18 +454,18 @@ public final class OPENiAsync {
 
          @Override
          public void onAppPermsDenied(String error) {
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onPermissionDenied();
          }
 
          @Override
          public void onAppPermsCancelled(String perms) {
             Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onPermissionDenied();
          }
 
          @Override
          public void onFailure(String error) {
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onFailure(error);
          }
       });
 
@@ -467,18 +482,18 @@ public final class OPENiAsync {
 
          @Override
          public void onAppPermsDenied(String error) {
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onPermissionDenied();
          }
 
          @Override
          public void onAppPermsCancelled(String perms) {
             Toast.makeText(context, "Unable to Continue without permissions", Toast.LENGTH_LONG);
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onPermissionDenied();
          }
 
          @Override
          public void onFailure(String error) {
-            iCloudletObjectResponse.onFailure();
+            iCloudletObjectResponse.onFailure(error);
          }
       });
 
@@ -500,7 +515,7 @@ public final class OPENiAsync {
 
          @Override
          public void onAppPermsDenied(String error) {
-            iListObjectsResponse.onFailure();
+            iListObjectsResponse.onPermissionDenied();
          }
 
          @Override
@@ -510,7 +525,7 @@ public final class OPENiAsync {
 
          @Override
          public void onFailure(String error) {
-            iListObjectsResponse.onFailure();
+            iListObjectsResponse.onFailure(error);
          }
       });
 
@@ -529,12 +544,12 @@ public final class OPENiAsync {
            }
            @Override
            public void onAppPermsDenied(String perms) {
-              cloudletIdResponse.onFailure();
+              cloudletIdResponse.onPermissionDenied();
            }
 
            @Override
            public void onFailure(String error) {
-              cloudletIdResponse.onFailure();
+              cloudletIdResponse.onFailure(error);
            }
         });
     }
@@ -543,6 +558,9 @@ public final class OPENiAsync {
    public boolean isTokenValid(String prefTokenValue) {
 
       try {
+         if (null == prefTokenValue){
+            return false;
+         }
 //         Log.d(TAG, "prefTokenValue " + prefTokenValue);
 //         Log.d(TAG, "prefTokenValue " + prefTokenValue.split("\\."));
 //         Log.d(TAG, "(prefTokenValue.split(\".\"))[1] " + (prefTokenValue.split("\\."))[1]);
@@ -615,12 +633,12 @@ public final class OPENiAsync {
 
            @Override
            public void onAppPermsDenied(String error) {
-              searchCloudletsResults.onFailure();
+              searchCloudletsResults.onPermissionDenied();
            }
 
            @Override
            public void onFailure(String error) {
-              searchCloudletsResults.onFailure();
+              searchCloudletsResults.onFailure(error);
            }
         });
     }
@@ -640,12 +658,12 @@ public final class OPENiAsync {
 
             @Override
             public void onAppPermsDenied(String error) {
-                searchCloudletResults.onFailure();
+                searchCloudletResults.onPermissionDenied();
             }
 
             @Override
             public void onFailure(String error) {
-                searchCloudletResults.onFailure();
+                searchCloudletResults.onFailure(error);
             }
         });
     }
@@ -660,6 +678,7 @@ public final class OPENiAsync {
             oo.setOpeniType(typeId);
             try {
                oo.setData(OPENiUtils.jsonObjectToMap(jo));
+               Log.d(TAG, oo.toString());
                new AsyncCreateCloudletObjectOperation(objectsApi, oo, authToken, IcreateCloudletObject).execute();
             } catch (JSONException e) {
               onFailure(e.getMessage());
@@ -673,12 +692,12 @@ public final class OPENiAsync {
 
          @Override
          public void onAppPermsDenied(String error) {
-            IcreateCloudletObject.onFailure();
+            IcreateCloudletObject.onPermissionDenied();
          }
 
          @Override
          public void onFailure(String error) {
-            IcreateCloudletObject.onFailure();
+            IcreateCloudletObject.onFailure(error);
          }
       });
    }
@@ -699,12 +718,12 @@ public final class OPENiAsync {
 
             @Override
             public void onAppPermsDenied(String error) {
-                IcreateCloudletObject.onFailure();
+                IcreateCloudletObject.onPermissionDenied();
             }
 
             @Override
             public void onFailure(String error) {
-                IcreateCloudletObject.onFailure();
+                IcreateCloudletObject.onFailure(error);
             }
         });
     }
@@ -726,12 +745,12 @@ public final class OPENiAsync {
 
             @Override
             public void onAppPermsDenied(String error) {
-                iOPENiApiCall.onFailure();
+                iOPENiApiCall.onPermissionDenied();
             }
 
             @Override
             public void onFailure(String error) {
-                iOPENiApiCall.onFailure();
+                iOPENiApiCall.onFailure(error);
             }
         });
 

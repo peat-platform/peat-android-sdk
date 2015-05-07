@@ -8,10 +8,10 @@ import eu.openiict.client.model.OPENiObjectList;
  */
 public interface ISearchCloudletsResultsCall<ProcessObject> {
 
-    public ProcessObject doProcess(String authToken) throws ApiException;
-
     public void onSuccess(OPENiObjectList objectList);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

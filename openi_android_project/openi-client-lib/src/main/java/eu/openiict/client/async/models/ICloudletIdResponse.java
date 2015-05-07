@@ -7,6 +7,8 @@ public interface ICloudletIdResponse {
 
     public void onSuccess(String cloudletID);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String error);
 
 }

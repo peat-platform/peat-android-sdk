@@ -9,5 +9,8 @@ import eu.openiict.client.model.Permissions;
  */
 public interface IPermissionsResult {
    public void onSuccess(List<Permissions> permissions);
+
    public void onFailure(String message);
+
+   public void onPermissionDenied();
 }

@@ -3,6 +3,9 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.openiict.client.api.ObjectsApi;
 import eu.openiict.client.async.models.ICloudletObjectResponse;
 import eu.openiict.client.common.ApiException;
@@ -11,7 +14,7 @@ import eu.openiict.client.model.OPENiObject;
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPENiObject> {
+public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, Object> {
 
     String objectId;
     Boolean resolveObject;
@@ -44,7 +47,7 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPE
 
 
     @Override
-    protected OPENiObject doInBackground(String... params) {
+    protected Object doInBackground(String... params) {
 
         try {
             if (null == cloudletId){
@@ -52,24 +55,40 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, OPE
             }
             return objectsApi.getObject(cloudletId, objectId, resolveObject, auth);
         } catch (ApiException e) {
-            Log.d("AsyncGetCloudletOper", e.toString());
-            return null;
+            Log.d("AsyncGetCloudletOper1", e.toString());
+            return e;
         }
 
     }
 
 
     @Override
-    protected void onPostExecute(OPENiObject o) {
+    protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
         //Log.d("AsyncGetCloudletObjectOperation", "token " + auth.toString());
-        Log.d("AsyncGetCloudletObje", "" + o);
+        Log.d("AsyncGetCloudletObje2", "" + o);
 
         if (null == o) {
-            iCloudletObjectResponse.onFailure();
-        } else {
-            iCloudletObjectResponse.onSuccess(o);
+            iCloudletObjectResponse.onFailure("null response");
+        }
+        else if( o instanceof ApiException){
+
+            try {
+                final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
+                if (null != jo.get("error") && jo.get("error").equals("permission denied")){
+                    iCloudletObjectResponse.onPermissionDenied();
+                }
+                else {
+                    iCloudletObjectResponse.onFailure(((ApiException) o).getMessage());
+                }
+            }
+            catch (JSONException e){
+                iCloudletObjectResponse.onFailure(((ApiException) o).getMessage());
+            }
+        }
+        else {
+            iCloudletObjectResponse.onSuccess((OPENiObject) o);
         }
     }
 }

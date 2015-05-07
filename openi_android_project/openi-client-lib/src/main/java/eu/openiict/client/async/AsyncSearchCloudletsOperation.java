@@ -3,6 +3,9 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.openiict.client.api.SearchApi;
 import eu.openiict.client.async.models.ISearchCloudletsResults;
 import eu.openiict.client.common.ApiException;
@@ -11,7 +14,7 @@ import eu.openiict.client.model.OPENiObjectList;
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncSearchCloudletsOperation extends AsyncTask<String, Void, OPENiObjectList> {
+public class AsyncSearchCloudletsOperation extends AsyncTask<String, Void, Object> {
 
     String with_property, property_filter, type, offset, limit;
     Boolean id_only;
@@ -34,35 +37,50 @@ public class AsyncSearchCloudletsOperation extends AsyncTask<String, Void, OPENi
 
 
     @Override
-    protected OPENiObjectList doInBackground(String... params) {
+    protected Object doInBackground(String... params) {
 
-        Log.d("AsyncGetCloudletOperation", token);
+        Log.d("AsyncGetClo", token);
 
         try {
             //Boolean id_only = true;
             return searchApi.search(with_property, property_filter, type, id_only, offset, limit, token);
         } catch (ApiException e) {
-            Log.d("AsyncGetCloudletOperation", e.toString());
-            return null;
+            Log.d("AsyncGetClo", e.toString());
+            return e;
         }
 
     }
 
 
     @Override
-    protected void onPostExecute(OPENiObjectList searchResults) {
-        super.onPostExecute(searchResults);
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
 
-        if (null == searchResults) {
-            IsearchResponse.onFailure();
-        } else {
+        if (null == o) {
+            IsearchResponse.onFailure("empty search result");
+        } else if( o instanceof ApiException){
+
             try {
-                Log.d("AsyncGetSearchCloudletsOperation", "search results: " + searchResults.toString());
-                IsearchResponse.onSuccess(searchResults);
-            } catch (Exception e) {
-                IsearchResponse.onFailure();
+                final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
+                if (null != jo.get("error") && jo.get("error").equals("permission denied")){
+                    IsearchResponse.onPermissionDenied();
+                }
+                else {
+                    IsearchResponse.onFailure(((ApiException) o).getMessage());
+                }
             }
-            Log.d("sessionToken", searchResults.toString());
+            catch (JSONException e){
+                IsearchResponse.onFailure(((ApiException) o).getMessage());
+            }
+        }
+        else {
+            try {
+                Log.d("AsyncGetSearchClou", "search results: " + o.toString());
+                IsearchResponse.onSuccess((OPENiObjectList) o);
+            } catch (Exception e) {
+                IsearchResponse.onFailure(e.getMessage());
+            }
+            Log.d("sessionToken", o.toString());
         }
     }
 }

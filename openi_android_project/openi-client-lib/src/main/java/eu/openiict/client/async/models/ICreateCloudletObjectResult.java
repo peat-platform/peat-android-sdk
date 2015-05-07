@@ -10,6 +10,8 @@ public interface ICreateCloudletObjectResult {
 
     public void onSuccess(ObjectResponse createObjResp);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

@@ -9,6 +9,8 @@ public interface IOPENiAPiCall<ProcessObject> {
 
     public void onSuccess(Object object);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

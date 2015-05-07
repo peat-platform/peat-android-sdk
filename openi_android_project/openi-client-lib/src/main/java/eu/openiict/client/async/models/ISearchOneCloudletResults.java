@@ -12,6 +12,8 @@ public interface ISearchOneCloudletResults<ProcessObject> {
 
     public void onSuccess(OPENiObjectList objList);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

@@ -11,6 +11,8 @@ public interface IListObjectsResponse<ProcessObject> {
 
     public void onSuccess(OPENiObjectList openiObjectList);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

@@ -10,6 +10,8 @@ public interface ICloudletObjectResponse<ProcessObject> {
 
     public void onSuccess(OPENiObject opeNiObjectobj);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

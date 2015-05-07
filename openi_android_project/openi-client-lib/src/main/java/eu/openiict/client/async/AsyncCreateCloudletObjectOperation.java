@@ -3,6 +3,9 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.openiict.client.api.ObjectsApi;
 import eu.openiict.client.async.models.ICreateCloudletObjectResult;
 import eu.openiict.client.common.ApiException;
@@ -12,7 +15,7 @@ import eu.openiict.client.model.ObjectResponse;
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncCreateCloudletObjectOperation extends AsyncTask<String, Void, ObjectResponse> {
+public class AsyncCreateCloudletObjectOperation extends AsyncTask<String, Void, Object> {
 
     private static final String TAG = "AsyncCreateCloudlet";
 
@@ -31,7 +34,7 @@ public class AsyncCreateCloudletObjectOperation extends AsyncTask<String, Void, 
 
 
     @Override
-    protected ObjectResponse doInBackground(String... params) {
+    protected Object doInBackground(String... params) {
 
         Log.d(TAG, token);
 
@@ -39,26 +42,36 @@ public class AsyncCreateCloudletObjectOperation extends AsyncTask<String, Void, 
             return objectsApi.createObjectWithAuth(objectBody, token);
         } catch (ApiException e) {
             Log.d(TAG, e.toString());
-            return null;
+            return e;
         }
 
     }
 
 
     @Override
-    protected void onPostExecute(ObjectResponse objectResponse) {
-        super.onPostExecute(objectResponse);
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
 
-        if (null == objectResponse) {
-            IcreateObjectResult.onFailure();
-        } else {
+        if (null == o) {
+            IcreateObjectResult.onFailure("null response");
+        }
+        else if( o instanceof ApiException){
+
             try {
-                Log.d(TAG, "create object results: " + objectResponse.toString());
-                IcreateObjectResult.onSuccess(objectResponse);
-            } catch (Exception e) {
-                IcreateObjectResult.onFailure();
+                final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
+                if (null != jo.get("error") && jo.get("error").equals("permission denied")){
+                    IcreateObjectResult.onPermissionDenied();
+                }
+                else {
+                    IcreateObjectResult.onFailure(((ApiException) o).getMessage());
+                }
             }
-            //Log.d("sessionToken", objectResponse.toString());
+            catch (JSONException e){
+                IcreateObjectResult.onFailure(((ApiException) o).getMessage());
+            }
+        }
+        else{
+            IcreateObjectResult.onSuccess((ObjectResponse) o);
         }
     }
 }

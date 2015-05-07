@@ -3,6 +3,9 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.openiict.client.api.CloudletsApi;
 import eu.openiict.client.async.models.ICloudletIdResponse;
 import eu.openiict.client.common.ApiException;
@@ -11,7 +14,7 @@ import eu.openiict.client.model.OPENiCloudlet;
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncGetCloudletOperation extends AsyncTask<String, Void, OPENiCloudlet> {
+public class AsyncGetCloudletOperation extends AsyncTask<String, Void, Object> {
 
    private CloudletsApi cloudletsApi;
    private String token;
@@ -25,7 +28,7 @@ public class AsyncGetCloudletOperation extends AsyncTask<String, Void, OPENiClou
 
 
    @Override
-   protected OPENiCloudlet doInBackground(String... params) {
+   protected Object doInBackground(String... params) {
 
       Log.d("AsyncGetCloudletOperati", token);
 
@@ -33,23 +36,38 @@ public class AsyncGetCloudletOperation extends AsyncTask<String, Void, OPENiClou
          return cloudletsApi.getCloudletId(token);
       } catch (ApiException e) {
          Log.d("AsyncGetCloudletOpe", e.toString());
-         return null;
+         return e;
       }
 
    }
 
    @Override
-   protected void onPostExecute(OPENiCloudlet cloudlet) {
-      super.onPostExecute(cloudlet);
+   protected void onPostExecute(Object o) {
 
-      if (null == cloudlet) {
-         IcloudletIdResponse.onFailure();
-      } else {
+      if (null == o) {
+         IcloudletIdResponse.onFailure("empty message");
+      }
+      else if( o instanceof ApiException){
+
          try {
-            Log.d("AsyncGetCloudletOpe", "cloudlet " + cloudlet.toString());
-            IcloudletIdResponse.onSuccess(cloudlet.getId());
+            final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
+            if (null != jo.get("error") && jo.get("error").equals("permission denied")){
+               IcloudletIdResponse.onPermissionDenied();
+            }
+            else {
+               IcloudletIdResponse.onFailure(((ApiException) o).getMessage());
+            }
+         }
+         catch (JSONException e){
+            IcloudletIdResponse.onFailure(((ApiException) o).getMessage());
+         }
+      }
+      else {
+         try {
+            Log.d("AsyncGetCloudletOpe", "cloudlet " + o.toString());
+            IcloudletIdResponse.onSuccess(((OPENiCloudlet) o).getId());
          } catch (Exception e) {
-            IcloudletIdResponse.onFailure();
+            IcloudletIdResponse.onFailure(e.getMessage());
          }
       }
    }

@@ -8,10 +8,10 @@ import eu.openiict.client.model.PermissionsResponse;
  */
 public interface IPostPermissionsResponse<ProcessObject> {
 
-    //public ProcessObject doProcess(String authToken) throws ApiException;
-
     public void onSuccess(PermissionsResponse premPostResp);
 
-    public void onFailure();
+    public void onPermissionDenied();
+
+    public void onFailure(String message);
 
 }

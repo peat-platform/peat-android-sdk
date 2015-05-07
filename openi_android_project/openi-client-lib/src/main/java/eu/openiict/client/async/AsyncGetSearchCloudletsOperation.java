@@ -3,6 +3,9 @@ package eu.openiict.client.async;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.openiict.client.api.SearchApi;
 import eu.openiict.client.async.models.ISearchCloudletsResults;
 import eu.openiict.client.common.ApiException;
@@ -11,7 +14,7 @@ import eu.openiict.client.model.OPENiObjectList;
 /**
  * Created by dmccarthy on 15/11/14.
  */
-public class AsyncGetSearchCloudletsOperation extends AsyncTask<String, Void, OPENiObjectList> {
+public class AsyncGetSearchCloudletsOperation extends AsyncTask<String, Void, Object> {
 
     private static final String TAG = "AsyncSearchCloudlets";
 
@@ -55,19 +58,35 @@ public class AsyncGetSearchCloudletsOperation extends AsyncTask<String, Void, OP
 
 
     @Override
-    protected void onPostExecute(OPENiObjectList searchResults) {
-        super.onPostExecute(searchResults);
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
 
-        if (null == searchResults) {
-            iSearchResponse.onFailure();
-        } else {
+        if (null == o) {
+            iSearchResponse.onFailure("empty search result");
+        }
+        else if( o instanceof ApiException){
+
             try {
-                Log.d(TAG, "cloudlet " + searchResults.toString());
-                iSearchResponse.onSuccess(searchResults);
-            } catch (Exception e) {
-                iSearchResponse.onFailure();
+                final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
+                if (null != jo.get("error") && jo.get("error").equals("permission denied")){
+                    iSearchResponse.onPermissionDenied();
+                }
+                else {
+                    iSearchResponse.onFailure(((ApiException) o).getMessage());
+                }
             }
-            Log.d("sessionToken", searchResults.toString());
+            catch (JSONException e){
+                iSearchResponse.onFailure(((ApiException) o).getMessage());
+            }
+        }
+        else {
+            try {
+                Log.d(TAG, "cloudlet " + o.toString());
+                iSearchResponse.onSuccess((OPENiObjectList) o);
+            } catch (Exception e) {
+                iSearchResponse.onFailure(e.getMessage());
+            }
+            Log.d("sessionToken", o.toString());
         }
     }
 }
