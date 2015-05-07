@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import eu.openiict.client.api.ObjectsApi;
-import eu.openiict.client.async.models.ICloudletObjectResponse;
+import eu.openiict.client.async.models.IPeatResponse;
 import eu.openiict.client.common.ApiException;
 import eu.openiict.client.model.OPENiObjectList;
 
@@ -18,12 +18,12 @@ public class AsyncGetLatestObjectOperation extends AsyncTask<String, Void, Objec
 
     private String type;
     private String auth;
-    private ICloudletObjectResponse cb;
+    private IPeatResponse cb;
 
     private ObjectsApi objectsApi;
 
 
-    public AsyncGetLatestObjectOperation(ObjectsApi objectsApi, String type, String auth, ICloudletObjectResponse cb) {
+    public AsyncGetLatestObjectOperation(ObjectsApi objectsApi, String type, String auth, IPeatResponse cb) {
         this.auth                 = auth;
         this.type                 = type;
         this.objectsApi           = objectsApi;

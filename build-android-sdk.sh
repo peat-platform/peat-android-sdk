@@ -46,4 +46,4 @@ cp -r ../swagger-codegen/generated-code/android-java/target/dependency/* openi-c
 
 bash gradlew assemble
 
-cp openi-client-lib/build/outputs/aar/openi-client-lib-release.aar ../openi-client-lib.aar
+cp openi-client-lib/build/outputs/aar/openi-client-lib-release.aar ../peat-client-lib.aar

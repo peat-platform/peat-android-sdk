@@ -20,13 +20,13 @@
         />
 
     <Button
-        android:id="@+id/logoutOfOPENi"
+        android:id="@+id/logoutOfPeat"
         android:text="Logout"
         style="@style/PEATMenuButton"
         />
 
     <Button
-        android:id="@+id/closeOpeniMenu"
+        android:id="@+id/closePeatMenu"
         android:text="Back"
         style="@style/PEATMenuButton"
         />

@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import eu.openiict.client.api.ObjectsApi;
-import eu.openiict.client.async.models.ICloudletObjectResponse;
+import eu.openiict.client.async.models.IPeatResponse;
 import eu.openiict.client.common.ApiException;
 import eu.openiict.client.model.OPENiObject;
 
@@ -20,29 +20,29 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, Obj
     Boolean resolveObject;
     private String auth;
     private String cloudletId;
-    private ICloudletObjectResponse iCloudletObjectResponse;
+    private IPeatResponse iPeatResponse;
 
     private ObjectsApi objectsApi;
 
 
-    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String cloudletId, String objectId, Boolean resolveObject, String auth, ICloudletObjectResponse iCloudletObjectResponse) {
+    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String cloudletId, String objectId, Boolean resolveObject, String auth, IPeatResponse iPeatResponse) {
         this.auth = auth;
         this.cloudletId = cloudletId;
         this.objectId = objectId;
         this.resolveObject = resolveObject;
 
         this.objectsApi = objectsApi;
-        this.iCloudletObjectResponse = iCloudletObjectResponse;
+        this.iPeatResponse = iPeatResponse;
     }
 
 
-    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String objectId, Boolean resolveObject, String auth, ICloudletObjectResponse iCloudletObjectResponse) {
+    public AsyncGetCloudletObjectOperation(ObjectsApi objectsApi, String objectId, Boolean resolveObject, String auth, IPeatResponse iPeatResponse) {
         this.auth = auth;
         this.objectId = objectId;
         this.resolveObject = resolveObject;
 
         this.objectsApi = objectsApi;
-        this.iCloudletObjectResponse = iCloudletObjectResponse;
+        this.iPeatResponse = iPeatResponse;
     }
 
 
@@ -70,25 +70,25 @@ public class AsyncGetCloudletObjectOperation extends AsyncTask<String, Void, Obj
         Log.d("AsyncGetCloudletObje2", "" + o);
 
         if (null == o) {
-            iCloudletObjectResponse.onFailure("null response");
+            iPeatResponse.onFailure("null response");
         }
         else if( o instanceof ApiException){
 
             try {
                 final JSONObject jo = new JSONObject(((ApiException) o).getMessage());
                 if (null != jo.get("error") && jo.get("error").equals("permission denied")){
-                    iCloudletObjectResponse.onPermissionDenied();
+                    iPeatResponse.onPermissionDenied();
                 }
                 else {
-                    iCloudletObjectResponse.onFailure(((ApiException) o).getMessage());
+                    iPeatResponse.onFailure(((ApiException) o).getMessage());
                 }
             }
             catch (JSONException e){
-                iCloudletObjectResponse.onFailure(((ApiException) o).getMessage());
+                iPeatResponse.onFailure(((ApiException) o).getMessage());
             }
         }
         else {
-            iCloudletObjectResponse.onSuccess((OPENiObject) o);
+            iPeatResponse.onSuccess((OPENiObject) o);
         }
     }
 }
