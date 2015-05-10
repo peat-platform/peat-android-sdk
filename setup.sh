@@ -24,8 +24,8 @@ tar -xvf 2.0.17.tar.gz
 rm -f 2.0.17.tar.gz
 mv swagger-codegen-2.0.17 swagger-codegen
 
-cp -r openi-custom-code/src/main/scala/*     swagger-codegen/src/main/scala/
-cp -r openi-custom-code/src/main/resources/* swagger-codegen/src/main/resources/
+cp -r peat-custom-code/src/main/scala/*     swagger-codegen/src/main/scala/
+cp -r peat-custom-code/src/main/resources/* swagger-codegen/src/main/resources/
 
 cd swagger-codegen
 

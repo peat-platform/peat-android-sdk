@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Permissions"
+        android:id="@+id/permissions"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
+        />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Creating an Alert"
+        android:id="@+id/creatingAnAlert"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
+        />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notifications"
+        android:id="@+id/Notifications"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
+        />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:paddingLeft="10dp"/>
+
+</LinearLayout><!-- From: file:/Users/dmccarthy/work/openi/wp4/peat-android-sdk/peat_android_project/peat-client-lib/src/main/res/layout/activity_settings.xml --><!-- From: file:/Users/dmccarthy/work/openi/wp4/peat-android-sdk/peat_android_project/peat-client-lib/build/intermediates/bundles/debug/res/layout/activity_settings.xml -->

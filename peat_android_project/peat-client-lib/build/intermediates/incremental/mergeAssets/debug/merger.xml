@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/home/vagrant/repos/peat-android-sdk/peat_android_project/peat-client-lib/src/main/assets"/></dataSet><dataSet config="debug"><source path="/home/vagrant/repos/peat-android-sdk/peat_android_project/peat-client-lib/src/debug/assets"/></dataSet></merger>

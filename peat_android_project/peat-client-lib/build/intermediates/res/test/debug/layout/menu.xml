@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/background_dark" >
+
+    <TextView
+        android:text="@string/peat_menu_head"
+        style="@style/PEATMenuHeader"/>
+
+    <TextView
+        android:text="@string/peat_menu_desc"
+        style="@style/PEATMenuBodyItem" />
+
+    <Button
+        android:id="@+id/openUserDash"
+        android:text="Open Dashboard"
+        style="@style/PEATMenuButton"
+        />
+
+    <Button
+        android:id="@+id/logoutOfPeat"
+        android:text="Logout"
+        style="@style/PEATMenuButton"
+        />
+
+    <Button
+        android:id="@+id/closePeatMenu"
+        android:text="Back"
+        style="@style/PEATMenuButton"
+        />
+
+</LinearLayout><!-- From: file:/Users/dmccarthy/work/openi/wp4/peat-android-sdk/peat_android_project/peat-client-lib/src/main/res/layout/menu.xml --><!-- From: file:/Users/dmccarthy/work/openi/wp4/peat-android-sdk/peat_android_project/peat-client-lib/build/intermediates/bundles/debug/res/layout/menu.xml -->

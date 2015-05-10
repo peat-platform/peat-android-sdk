@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Create An Alert">
+    <!-- Profile ** -->
+    <PreferenceScreen
+        android:key="openi_profile_alerts"
+        android:summary="Let app access my profile info such as name, picture and other account information."
+        android:title="User Profile">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_profile_cat_alerts"
+            android:summary="Let app access my profile such as name, picture and other account information."
+            android:title="My Profile" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_profile_cat_alerts"
+            android:key="pref_Account_alerts"
+            android:summary="Let app access my account info."
+            android:title="Account" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_profile_cat_alerts"
+            android:key="pref_User_alerts"
+            android:summary="Let app access my user info."
+            android:title="User" />
+
+        <!-- < ListPreference
+             android:defaultValue="Current App"
+             android:dependency="pref_profile"
+             android:dialogTitle="Assign to"
+             android:entries="@array/entries_list_assignment"
+             android:entryValues="@array/entryvalues_list_assignment"
+             android:key="pref_profile_assignment"
+             android:title="Assign to current app or all app" />-->
+
+        <!--OPENi-->
+        <!--        <PreferenceScreen
+                    android:dependency="pref_profile"
+                    android:title="OPENi">
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:key="openi_username"
+                        android:summary=""
+                        android:title="User Name" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="Person"
+                        android:title="User Type" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:key="openi_first_name"
+                        android:summary=""
+                        android:title="First Name" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:key="openi_last_name"
+                        android:summary=""
+                        android:title="Last Name" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:key="openi_email"
+                        android:summary=""
+                        android:title="Email" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:key="openi_password"
+                        android:summary="*******"
+                        android:title="Password" />
+                </PreferenceScreen>-->
+
+        <!--Pinterest-->
+        <!--        <PreferenceScreen
+                    android:dependency="pref_profile"
+                    android:key="pref_key_openi"
+                    android:title="Pinterest">
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="John G"
+                        android:title="User Name" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="Person"
+                        android:title="User Type" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="john_gough@gmail.com"
+                        android:title="Email" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="*******"
+                        android:title="Password" />
+                </PreferenceScreen>-->
+
+        <!--Facebook-->
+        <!--        <PreferenceScreen
+                    android:dependency="pref_profile"
+                    android:key="pref_key_openi"
+                    android:title="Facebook">
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:key="openi_username_switch_preference"
+                        android:summary="Michael Jordan"
+                        android:title="User Name" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="Person"
+                        android:title="User Type" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="mjordah@gmail.com"
+                        android:title="Email" />
+                    <SwitchPreference
+                        android:defaultValue="false"
+                        android:dependency="pref_profile"
+                        android:summary="*******"
+                        android:title="Password" />
+                </PreferenceScreen>-->
+
+    </PreferenceScreen>
+    <!-- Wallet -->
+    <PreferenceScreen
+        android:key="openi_online_payment_alerts"
+        android:summary="Let app access my online payment info."
+        android:title="Online Payment Info">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_online_payment_cat_alerts"
+            android:summary="Let app access my online payment info"
+            android:title="My Online Payment" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_online_payment_cat_alerts"
+            android:key="pref_Card_alerts"
+            android:summary="Let app access my card(s) info"
+            android:title="Card(s)" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_online_payment_cat_alerts"
+            android:key="pref_Wallet_alerts"
+            android:summary="Let app access my wallet info"
+            android:title="Wallet" />
+    </PreferenceScreen>
+    <!-- Device -->
+    <PreferenceScreen
+        android:key="openi_device_alerts"
+        android:summary="Let app use my device information."
+        android:title="Device Information">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_device_cat_alerts"
+            android:summary="Let app use my device information."
+            android:title="Device Information" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_device_cat_alerts"
+            android:key="pref_Application_alerts"
+            android:summary="Let app access my application(s)"
+            android:title="Application(s)" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_device_cat_alerts"
+            android:key="pref_Device_alerts"
+            android:summary="Let app access my application(s)"
+            android:title="Device(s)" />
+
+    </PreferenceScreen>
+    <!-- Contact -->
+    <PreferenceScreen
+        android:key="openi_contact_alerts"
+        android:summary="Let app access my contacts information."
+        android:title="Contact information">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_Contact_alerts"
+            android:summary="Let app use my contacts."
+            android:title="My Contacts" />
+    </PreferenceScreen>
+    <!-- Media ** -->
+    <PreferenceScreen
+        android:key="openi_media_alerts"
+        android:summary="Let app use my media."
+        android:title="Media">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_media_alerts"
+            android:summary="Let app use my media."
+            android:title="My Media" />
+        <!--        <ListPreference
+                    android:defaultValue="Current App"
+                    android:dependency="pref_media"
+                    android:dialogTitle="Assign to"
+                    android:entries="@array/entries_list_assignment"
+                    android:entryValues="@array/entryvalues_list_assignment"
+                    android:key="pref_media_assignment"
+                    android:title="Assign to current app or all app" />-->
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_Photo_alerts"
+            android:title="Photos" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_Audio_alerts"
+            android:title="Audio" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_Video_alerts"
+            android:title="Videos" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_Article_alerts"
+            android:title="Articles" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_File_alerts"
+            android:title="Files" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_Playlist_alerts"
+            android:title="Playlists" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_media_alerts"
+            android:key="pref_Folder_alerts"
+            android:title="Folders" />
+
+
+    </PreferenceScreen>
+    <!-- Webcam&Micro -->
+    <!--    <Preference
+            android:key="openi_webcam_micro"
+            android:summary="Let app use my Webcam and Microphone."
+            android:title="Webcam &amp; Microphone" />-->
+    <!-- SocialActivity -->
+    <PreferenceScreen
+        android:key="openi_social_alerts"
+        android:summary="Let app access information about my social activity."
+        android:title="Social Activity" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_social_cat_alerts"
+            android:summary="Let app access information about my social activity."
+            android:title="My Social Activity" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Like_alerts"
+            android:summary=""
+            android:title="Likes" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Comment_alerts"
+            android:summary=""
+            android:title="Comments" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Dislike_alerts"
+            android:summary=""
+            android:title="Dislikes" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Favorite_alerts"
+            android:summary=""
+            android:title="Favorites" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Friendship_alerts"
+            android:summary=""
+            android:title="Friendship" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Tag_alerts"
+            android:summary=""
+            android:title="Tags" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Game_alerts"
+            android:summary=""
+            android:title="Games" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Badge_alerts"
+            android:summary=""
+            android:title="Badges" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_social_cat_alerts"
+            android:key="pref_Note_alerts"
+            android:summary=""
+            android:title="Notes" />
+
+    </PreferenceScreen>
+    <!-- Produc&Service -->
+    <PreferenceScreen
+        android:key="openi_product_service_alerts"
+        android:summary="Let app use my services and product information."
+        android:title="Product &amp; Services" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_product_cat_alerts"
+            android:summary="Let app use my services and product information."
+            android:title="My Product &amp; Services" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_product_cat_alerts"
+            android:key="pref_Service_alerts"
+            android:summary=""
+            android:title="Services" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_product_cat_alerts"
+            android:key="pref_Products_alerts"
+            android:summary=""
+            android:title="Products" />
+
+    </PreferenceScreen>
+    <!-- Health & Condition -->
+    <PreferenceScreen
+        android:key="openi_health"
+        android:summary="Let app access my health profile information."
+        android:title="Health Factors &amp; Condition" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_health_cat_alerts"
+            android:summary="Let app use my health profile information."
+            android:title="My Health and Condition" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_health_cat_alerts"
+            android:key="pref_Nutrition_alerts"
+            android:summary=""
+            android:title="Nutrition" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_health_cat_alerts"
+            android:key="pref_Measurement_alerts"
+            android:summary=""
+            android:title="Measurement" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="pref_health_cat_alerts"
+            android:key="pref_Workout_alerts"
+            android:summary=""
+            android:title="Workout" />
+    </PreferenceScreen>
+    <!-- My Location ** -->
+    <PreferenceScreen
+        android:defaultValue="false"
+        android:key="openi_location_alerts"
+        android:summary="Let app use my location."
+        android:title="Locations">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_location_cat_alerts"
+            android:summary="Let app use my location."
+            android:title="My Locations" />
+
+        <PreferenceCategory android:title="Location">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Event_alerts"
+                android:summary=""
+                android:title="Events" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Places_alerts"
+                android:summary=""
+                android:title="Places" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Route_alerts"
+                android:summary=""
+                android:title="Route" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Review_alerts"
+                android:summary=""
+                android:title="Review" />
+        </PreferenceCategory>
+
+        <PreferenceCategory android:title="Activity">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Checkin_alerts"
+                android:title="Chekins" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Status_alerts"
+                android:title="Status" />
+        </PreferenceCategory>
+
+        <PreferenceCategory android:title="Product">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:dependency="pref_location_cat_alerts"
+                android:key="pref_Shop_alerts"
+                android:title="Shop" />
+        </PreferenceCategory>
+    </PreferenceScreen>
+
+    <!--<ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="false" />-->
+
+</PreferenceScreen>
+<!-- From: file:/home/vagrant/repos/peat-android-sdk/peat_android_project/peat-client-lib/src/main/res/xml/alerts.xml -->

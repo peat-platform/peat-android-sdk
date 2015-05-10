@@ -4,10 +4,10 @@ openi_android_project/gradle
 openi_android_project/.gradle
 openi_android_project/local.properties
 openi_android_project/openi-client-lib/libs
-openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/api
-openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/common
-openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/model
-openi_android_project/openi-client-lib/src/main/java/eu/openiict/client/utils
+openi_android_project/openi-client-lib/src/main/java/org/peatplatform/client/api
+openi_android_project/openi-client-lib/src/main/java/org/peatplatform/client/common
+openi_android_project/openi-client-lib/src/main/java/org/peatplatform/client/model
+openi_android_project/openi-client-lib/src/main/java/org/peatplatform/client/utils
 openi_android_project/openi-client-lib/src/main/gen/
 .idea
 .DS_Store
