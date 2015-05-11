@@ -29,6 +29,8 @@ cp -r peat-custom-code/src/main/resources/* swagger-codegen/src/main/resources/
 
 cd swagger-codegen
 
+rm -f target/scala-2.11/swagger-codegen.jar
+
 ./sbt assembly
 
 mv target/scala-2.11/swagger-codegen*.jar target/scala-2.11/swagger-codegen.jar

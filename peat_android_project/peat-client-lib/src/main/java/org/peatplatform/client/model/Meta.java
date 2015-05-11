@@ -5,33 +5,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Meta {
-  /* limit */
-  @JsonProperty("limit")
-  private Integer limit = null;
-  /* offset */
-  @JsonProperty("offset")
-  private Integer offset = null;
-  /* total_count */
+  /* Uri of the previous page relative to the current page settings. */
+  @JsonProperty("previous")
+  private String previous = null;
+  /* Total items count for the all collection */
   @JsonProperty("total_count")
   private Integer totalCount = null;
-  /* prev */
-  @JsonProperty("prev")
-  private String prev = null;
-  /* next */
+  /* Specify the offset to start displaying element on a page. */
+  @JsonProperty("offset")
+  private Integer offset = null;
+  /* Specify the number of element to display per page. */
+  @JsonProperty("limit")
+  private Integer limit = null;
+  /* Uri of the next page relative to the current page settings. */
   @JsonProperty("next")
   private String next = null;
-  public Integer getLimit() {
-    return limit;
+  public String getPrevious() {
+    return previous;
   }
-  public void setLimit(Integer limit) {
-    this.limit = limit;
-  }
-
-  public Integer getOffset() {
-    return offset;
-  }
-  public void setOffset(Integer offset) {
-    this.offset = offset;
+  public void setPrevious(String previous) {
+    this.previous = previous;
   }
 
   public Integer getTotalCount() {
@@ -41,11 +34,18 @@ public class Meta {
     this.totalCount = totalCount;
   }
 
-  public String getPrev() {
-    return prev;
+  public Integer getOffset() {
+    return offset;
   }
-  public void setPrev(String prev) {
-    this.prev = prev;
+  public void setOffset(Integer offset) {
+    this.offset = offset;
+  }
+
+  public Integer getLimit() {
+    return limit;
+  }
+  public void setLimit(Integer limit) {
+    this.limit = limit;
   }
 
   public String getNext() {
@@ -59,10 +59,10 @@ public class Meta {
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Meta {\n");
-    sb.append("  limit: ").append(limit).append("\n");
-    sb.append("  offset: ").append(offset).append("\n");
+    sb.append("  previous: ").append(previous).append("\n");
     sb.append("  total_count: ").append(totalCount).append("\n");
-    sb.append("  prev: ").append(prev).append("\n");
+    sb.append("  offset: ").append(offset).append("\n");
+    sb.append("  limit: ").append(limit).append("\n");
     sb.append("  next: ").append(next).append("\n");
     sb.append("}\n");
     return sb.toString();
