@@ -36,7 +36,7 @@ mvn dependency:copy-dependencies
 
 cp target/openi-android-client-1.0.0.jar ../../../openi-android-sdk-1.0.0.jar
 
-cd ~/repos/openi_android_sdk/openi_android_project
+cd ~/openi_android_sdk/openi_android_project
 
 cp -r ../swagger-codegen/generated-code/android-java/src/main/java/eu openi-client-lib/src/main/java
 
