@@ -31,7 +31,6 @@ import eu.openiict.client.R;
 import eu.openiict.client.api.AuthorizationsApi;
 import eu.openiict.client.api.CloudletsApi;
 import eu.openiict.client.api.ObjectsApi;
-import eu.openiict.client.api.PermissionsApi;
 import eu.openiict.client.api.SearchApi;
 import eu.openiict.client.async.models.IAuthTokenResponse;
 import eu.openiict.client.async.models.ICloudletIdResponse;
@@ -64,7 +63,6 @@ public final class OPENiAsync {
     private CloudletsApi      cloudletsApi;
     private ObjectsApi        objectsApi;
     private SearchApi         searchApi;
-    private PermissionsApi    permissionsApi;
 
     public static final String OPENi_PUBLIC_PREFERENCES   = "OPENi_prefs";
     private static final String OPENi_PREFERENCE_MISSING  = "UNKNOWN";
@@ -84,7 +82,6 @@ public final class OPENiAsync {
         this.cloudletsApi   = new CloudletsApi();
         this.searchApi      = new SearchApi();
         this.objectsApi     = new ObjectsApi();
-        this.permissionsApi = new PermissionsApi();
 
         attachMenu(context);
     }
@@ -108,7 +105,6 @@ public final class OPENiAsync {
       this.cloudletsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
       this.searchApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
       this.objectsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
-      this.permissionsApi.getInvoker().ignoreSSLCertificates(ignoreSSL);
 
    }
 
