@@ -1,4 +1,4 @@
-package eu.openiict.client.settings;
+package eu.peatplatform.client.settings;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -19,12 +19,12 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import eu.openiict.client.R;
-import eu.openiict.client.api.SubscriptionApi;
-import eu.openiict.client.async.OPENiAsync;
-import eu.openiict.client.async.models.IOPENiAPiCall;
-import eu.openiict.client.model.OPENiType;
-import eu.openiict.client.model.Subscription;
+import eu.peatplatform.client.R;
+import eu.peatplatform.client.api.SubscriptionApi;
+import eu.peatplatform.client.async.PEATAsync;
+import eu.peatplatform.client.async.models.IPEATAPiCall;
+import eu.peatplatform.client.model.PEATType;
+import eu.peatplatform.client.model.Subscription;
 
 public class creatingAnAlert extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -36,16 +36,16 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
     public static final String KEY_LOCATION_ASSIGNMENT = "pref_location_assignment";
     // Media
     public static final String KEY_MEDIA_ASSIGNMENT = "pref_media_assignment";
-    private static OPENiAsync openi;
+    private static PEATAsync peat;
     private static String cloudletID;
-    private static ArrayList<OPENiType> typeList = new ArrayList<OPENiType>();
+    private static ArrayList<PEATType> typeList = new ArrayList<PEATType>();
     private static CheckBoxPreference curPreference;
     PermissionsActivity yo = new PermissionsActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        this.openi = OPENiAsync.instance(this);
+        this.peat = PEATAsync.instance(this);
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.alerts);
@@ -55,15 +55,15 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
 
         final ArrayList<Preference> prefList = new ArrayList<Preference>();
 
-        prefList.add(findPreference("openi_wallet_alerts"));
-        prefList.add(findPreference("openi_device_alerts"));
-        prefList.add(findPreference("openi_contact_alerts"));
-        prefList.add(findPreference("openi_media_alerts"));
-        prefList.add(findPreference("openi_webcam_micro_alerts"));
-        prefList.add(findPreference("openi_social_alerts"));
-        prefList.add(findPreference("openi_product_service_alerts"));
-        prefList.add(findPreference("openi_health_alerts"));
-        prefList.add(findPreference("openi_location_alerts"));
+        prefList.add(findPreference("peat_wallet_alerts"));
+        prefList.add(findPreference("peat_device_alerts"));
+        prefList.add(findPreference("peat_contact_alerts"));
+        prefList.add(findPreference("peat_media_alerts"));
+        prefList.add(findPreference("peat_webcam_micro_alerts"));
+        prefList.add(findPreference("peat_social_alerts"));
+        prefList.add(findPreference("peat_product_service_alerts"));
+        prefList.add(findPreference("peat_health_alerts"));
+        prefList.add(findPreference("peat_location_alerts"));
 
         //Setting up the Checkboxes
         final CheckBoxPreference checkboxPref = (CheckBoxPreference)getPreferenceManager().findPreference("pref_profile_cat_alerts");
@@ -253,7 +253,7 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
 
     @Override
     protected void onResume() {
-        this.openi = OPENiAsync.instance(this);
+        this.peat = PEATAsync.instance(this);
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 

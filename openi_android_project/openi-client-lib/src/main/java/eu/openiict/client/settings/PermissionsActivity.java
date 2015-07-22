@@ -1,4 +1,4 @@
-package eu.openiict.client.settings;
+package eu.peatplatform.client.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,36 +8,36 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import eu.openiict.client.R;
-import eu.openiict.client.async.OPENiAsync;
+import eu.peatplatform.client.R;
+import eu.peatplatform.client.async.PEATAsync;
 
 public class PermissionsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "PermissionsActivity";
 
-    private OPENiAsync openi;
+    private PEATAsync peat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        this.openi = OPENiAsync.instance(this);
+        this.peat = PEATAsync.instance(this);
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
 
         final ArrayList<Preference> prefList = new ArrayList<Preference>();
-        prefList.add(findPreference("openi_profile"));
-        prefList.add(findPreference("openi_wallet"));
-        prefList.add(findPreference("openi_device"));
-        prefList.add(findPreference("openi_contact"));
-        prefList.add(findPreference("openi_media"));
-        prefList.add(findPreference("openi_webcam_micro"));
-        prefList.add(findPreference("openi_social"));
-        prefList.add(findPreference("openi_product_service"));
-        prefList.add(findPreference("openi_health"));
-        prefList.add(findPreference("openi_location"));
+        prefList.add(findPreference("peat_profile"));
+        prefList.add(findPreference("peat_wallet"));
+        prefList.add(findPreference("peat_device"));
+        prefList.add(findPreference("peat_contact"));
+        prefList.add(findPreference("peat_media"));
+        prefList.add(findPreference("peat_webcam_micro"));
+        prefList.add(findPreference("peat_social"));
+        prefList.add(findPreference("peat_product_service"));
+        prefList.add(findPreference("peat_health"));
+        prefList.add(findPreference("peat_location"));
 
     }
 
@@ -45,7 +45,7 @@ public class PermissionsActivity extends PreferenceActivity implements SharedPre
 
     @Override
     protected void onResume() {
-        this.openi = OPENiAsync.instance(this);
+        this.peat = PEATAsync.instance(this);
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }

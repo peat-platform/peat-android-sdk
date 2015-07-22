@@ -1,15 +1,15 @@
-package eu.openiict.client.async;
+package eu.peatplatform.client.async;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
 
-import eu.openiict.client.api.PermissionsApi;
-import eu.openiict.client.async.models.IPostPermissionsResponse;
-import eu.openiict.client.common.ApiException;
-import eu.openiict.client.model.Permissions;
-import eu.openiict.client.model.PermissionsResponse;
+import eu.peatplatform.client.api.PermissionsApi;
+import eu.peatplatform.client.async.models.IPostPermissionsResponse;
+import eu.peatplatform.client.common.ApiException;
+import eu.peatplatform.client.model.Permissions;
+import eu.peatplatform.client.model.PermissionsResponse;
 
 /**
  * Created by dmccarthy on 15/11/14.

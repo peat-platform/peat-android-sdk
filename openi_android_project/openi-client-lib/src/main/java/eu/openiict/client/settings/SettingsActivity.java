@@ -1,4 +1,4 @@
-package eu.openiict.client.settings;
+package eu.peatplatform.client.settings;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -6,18 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import eu.openiict.client.R;
-import eu.openiict.client.async.OPENiAsync;
+import eu.peatplatform.client.R;
+import eu.peatplatform.client.async.PEATAsync;
 
 
 public class SettingsActivity extends ActionBarActivity {
-    OPENiAsync openi;
+    PEATAsync peat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //OPENiAsync.init("c0e73b305fda9fa7510bfb08c49870da","d14dc301f086ba6615303f56458fec564a72cfe7a82054b908b13b228405cad7",this, "permissions.json");
-        openi = OPENiAsync.instance(this);
+        //PEATAsync.init("c0e73b305fda9fa7510bfb08c49870da","d14dc301f086ba6615303f56458fec564a72cfe7a82054b908b13b228405cad7",this, "permissions.json");
+        peat = PEATAsync.instance(this);
         setContentView(R.layout.activity_settings);
 
 
@@ -45,8 +45,8 @@ public class SettingsActivity extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-        //OPENiAsync.init("c0e73b305fda9fa7510bfb08c49870da","d14dc301f086ba6615303f56458fec564a72cfe7a82054b908b13b228405cad7",this, "permissions.json");
-        openi = OPENiAsync.instance(this);
+        //PEATAsync.init("c0e73b305fda9fa7510bfb08c49870da","d14dc301f086ba6615303f56458fec564a72cfe7a82054b908b13b228405cad7",this, "permissions.json");
+        peat = PEATAsync.instance(this);
         super.onResume();
 
         //getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);

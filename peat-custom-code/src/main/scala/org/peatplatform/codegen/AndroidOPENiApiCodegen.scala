@@ -2,7 +2,7 @@ package org.peatplatform.codegen
 
 import com.wordnik.swagger.codegen.BasicAndroidJavaGenerator
 
-object AndroidOPENiApiCodegen extends BasicAndroidJavaGenerator {
+object AndroidPEATApiCodegen extends BasicAndroidJavaGenerator {
   def main(args: Array[String]) = generateClient(args)
 
   // location of templates
