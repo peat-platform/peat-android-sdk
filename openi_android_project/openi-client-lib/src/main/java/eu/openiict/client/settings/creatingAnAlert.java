@@ -121,7 +121,7 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
         builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
-/*                openi.execOpeniApiCall(new IOPENiAPiCall() {
+/*                peat.execPEATApiCall(new IPEATAPiCall() {
                     @Override
                     public Object doProcess(String authToken) {
                         SubscriptionApi sub = new SubscriptionApi();
@@ -131,8 +131,8 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
 
                         //its wrong UI
                         if (curPreference==checkboxPref){
-                            //needs to be changed in the openisync the way you get the id
-                            subBody.setCloudletid(openi.getPref("cloudletid"));
+                            //needs to be changed in the peatsync the way you get the id
+                            subBody.setCloudletid(peat.getPref("cloudletid"));
                         }
 
                         return null;
@@ -140,12 +140,12 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
 
                     @Override
                     public void onSuccess(Object object) {
-                        Log.d("OPENi", object.toString());
+                        Log.d("PEAT", object.toString());
                     }
 
                     @Override
                     public void onFailure() {
-                        Log.d("OPENi", "Failed");
+                        Log.d("PEAT", "Failed");
                     }
                 });*/
 
@@ -274,7 +274,7 @@ public class creatingAnAlert extends PreferenceActivity implements SharedPrefere
             //showNotificationAlert();
             //Code to get if my checkbox is pressed or not
 
-            //openi.postPermissions();
+            //peat.postPermissions();
         } else{
             //showNotificationAlert();
             // remove permisisons

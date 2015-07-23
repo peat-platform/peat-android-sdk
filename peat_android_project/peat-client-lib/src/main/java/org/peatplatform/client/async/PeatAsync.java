@@ -555,7 +555,7 @@ public final class PeatAsync {
    }
 
 
-//   public void removeCloudletObject(final OPENiObject openiObject, final ICloudletObjectResponse iCloudletObjectResponse) {
+//   public void removeCloudletObject(final PEAATObject PEATObject, final ICloudletObjectResponse iCloudletObjectResponse) {
 //
 //      peatConnect(new IAuthTokenResponse() {
 //         @Override
