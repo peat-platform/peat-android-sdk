@@ -8,7 +8,7 @@ To build the PEAT Android SDK execute the following steps
 This module will build the SDK for any instance of PEAT once it can access its REST endpoints. )**
 
 
-Replace IP_ADDRESS/HOST with either the hostname or IP address of the server hosting the PEAT platform ege localhost or dev.peat-platform.eu.
+Replace IP_ADDRESS/HOST with either the hostname or IP address of the server hosting the PEAT platform ege localhost or dev.peat-platform.org.
 
 2) sh build-android-sdk.sh IP_ADDRESS/HOST
 

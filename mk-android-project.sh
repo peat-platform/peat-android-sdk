@@ -12,8 +12,8 @@ cd swagger-codegen
 
 scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true org.peatplatform.codegen.AndroidPEATApiCodegen http://$1/api-spec/v1
 
-#scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true org.peatplatform.codegen.AndroidPEATApiCodegen http://dev.peat-platform.eu/api-spec/v1
-#scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true org.peatplatform.codegen.AndroidPEATApiCodegen http://dev.peat-platform.eu/api-spec/v1/cloudlet
+#scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true org.peatplatform.codegen.AndroidPEATApiCodegen http://dev.peat-platform.org/api-spec/v1
+#scala -cp target/scala-2.11/swagger-codegen.jar -DskipErrors=true org.peatplatform.codegen.AndroidPEATApiCodegen http://dev.peat-platform.org/api-spec/v1/cloudlet
 
 sed -i 's/import org.peatplatform.client.model.Datetime;//' generated-code/android-java/src/main/java/org/peatplatform/client/model/*
 sed -i 's/import org.peatplatform.client.model.Integer;//' generated-code/android-java/src/main/java/org/peatplatform/client/model/*
