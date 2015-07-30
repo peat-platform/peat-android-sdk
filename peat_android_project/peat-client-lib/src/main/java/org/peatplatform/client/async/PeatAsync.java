@@ -498,13 +498,13 @@ public final class PeatAsync {
 
 
 
-   public void updateObject(final PeatObject openiObject, final IPeatResponse<PeatObject> iPeatResponse) {
+   public void updateObject(final PeatObject peatObject, final IPeatResponse<PeatObject> iPeatResponse) {
 
       execPeatApiCall(new IPeatAPiCall() {
          @Override
          public Object doProcess(String authToken) {
             try {
-               return objectsApi.setObjectByAuthToken(openiObject.getId(), openiObject, authToken);
+               return objectsApi.setObjectByAuthToken(peatObject.getId(), peatObject, authToken);
             } catch (ApiException e) {
                return e;
             }
@@ -555,7 +555,7 @@ public final class PeatAsync {
    }
 
 
-//   public void removeCloudletObject(final OPENiObject openiObject, final ICloudletObjectResponse iCloudletObjectResponse) {
+//   public void removeCloudletObject(final PEAATObject PEATObject, final ICloudletObjectResponse iCloudletObjectResponse) {
 //
 //      peatConnect(new IAuthTokenResponse() {
 //         @Override

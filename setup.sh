@@ -10,12 +10,11 @@ sudo apt-get install -y scala
 sudo apt-get -f install
 sudo apt-get install scala
 
-wget http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt//0.13.1/sbt.deb
-sudo dpkg -i sbt.deb
+echo "deb http://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
 sudo apt-get update -y
-sudo apt-get install sbt -y
+sudo apt-get install -y sbt
 
-rm -fr sbt.deb  scala-2.10.3.deb
+rm -fr scala-2.10.3.deb
 
 wget https://github.com/swagger-api/swagger-codegen/archive/2.0.17.tar.gz
 
