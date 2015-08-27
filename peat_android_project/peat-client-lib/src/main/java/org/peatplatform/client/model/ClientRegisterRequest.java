@@ -11,6 +11,9 @@ public class ClientRegisterRequest {
   /* The client's description */
   @JsonProperty("description")
   private String description = null;
+  /* Marks the Client as a Service Enabler. */
+  @JsonProperty("isSE")
+  private Boolean isSE = null;
   public String getName() {
     return name;
   }
@@ -25,12 +28,20 @@ public class ClientRegisterRequest {
     this.description = description;
   }
 
+  public Boolean getIsSE() {
+    return isSE;
+  }
+  public void setIsSE(Boolean isSE) {
+    this.isSE = isSE;
+  }
+
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientRegisterRequest {\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  description: ").append(description).append("\n");
+    sb.append("  isSE: ").append(isSE).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

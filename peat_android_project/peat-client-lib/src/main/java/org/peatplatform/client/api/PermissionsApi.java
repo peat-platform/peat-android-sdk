@@ -40,13 +40,13 @@ public class PermissionsApi {
     return (mimeTypes.isEmpty()) ? "application/octet-stream" : mimeTypes.iterator().next().toString();
   }
 
-  public PermissionsResponse updatePermissions (List<Permissions> body, String Authorization) throws ApiException {
+  public PermissionsResponse updatePermissions (List<Permissions> body, String Authorization, String api_key) throws ApiException {
     // verify required params are set
-    if(body == null || Authorization == null ) {
+    if(body == null || Authorization == null || api_key == null ) {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
-    String path = "/permissions".replaceAll("\\{format\\}","json");
+    String path = "/permissions/{api_key}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "api_key" + "\\}", apiInvoker.escapeString(api_key.toString()));
 
     String[] contentTypes = {
       "application/json"};
@@ -86,13 +86,13 @@ public class PermissionsApi {
       }
     }
   }
-  public List<Permissions> getPermissions (String Authorization) throws ApiException {
+  public List<Permissions> getPermissions (String Authorization, String api_key) throws ApiException {
     // verify required params are set
-    if(Authorization == null ) {
+    if(Authorization == null || api_key == null ) {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
-    String path = "/permissions".replaceAll("\\{format\\}","json");
+    String path = "/permissions/{api_key}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "api_key" + "\\}", apiInvoker.escapeString(api_key.toString()));
 
     String[] contentTypes = {
       "application/json"};

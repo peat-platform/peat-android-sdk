@@ -14,6 +14,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
+            android:name="org.peatplatform.client.settings.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
             android:name="org.peatplatform.client.settings.creatingAnAlert"
             android:label="@string/title_activity_creating_an_alert" >
         </activity>

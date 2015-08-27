@@ -184,10 +184,15 @@ public class SubscriptionApi {
       }
     }
   }
-  //error info- code: 501 reason: "Not yet Implemented" model: <none>
-  public String removeSubscription () throws ApiException {
+  //error info- code: 200 reason: "ok" model: <none>
+  //error info- code: 400 reason: "Bad Request" model: SubscriptionStatus
+  public String removeSubscription (String Authorization, String subscriptionId) throws ApiException {
+    // verify required params are set
+    if(Authorization == null || subscriptionId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
     // create path and map variables
-    String path = "/subscription/{subscriptionId}".replaceAll("\\{format\\}","json");
+    String path = "/subscription/{subscriptionId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "subscriptionId" + "\\}", apiInvoker.escapeString(subscriptionId.toString()));
 
     String[] contentTypes = {
       "application/json"};
@@ -199,6 +204,7 @@ public class SubscriptionApi {
     Map<String, String>    headerParams = new HashMap<String, String>();
     HttpEntity             httpEntity   = null;
 
+    headerParams.put("Authorization", Authorization);
     if(contentType.startsWith("multipart/form-data")) {
         boolean hasFields = false;
         MultipartEntityBuilder meBuilder = MultipartEntityBuilder.create();

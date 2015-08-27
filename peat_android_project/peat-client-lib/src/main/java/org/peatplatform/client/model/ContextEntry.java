@@ -21,9 +21,9 @@ public class ContextEntry {
   /* This property can only be set to the values listed in the allowed_values array. */
   @JsonProperty("@allowed_values")
   private List<String> allowedValues = new ArrayList<String>();
-  /* Identifier for the context */
-  @JsonProperty("@context")
-  private String context = null;
+  /* User friendly description of the object member */
+  @JsonProperty("@description")
+  private String description = null;
   public String getPropertyName() {
     return propertyName;
   }
@@ -59,11 +59,11 @@ public class ContextEntry {
     this.allowedValues = allowedValues;
   }
 
-  public String getContext() {
-    return context;
+  public String getDescription() {
+    return description;
   }
-  public void setContext(String context) {
-    this.context = context;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   @Override
@@ -75,7 +75,7 @@ public class ContextEntry {
     sb.append("  required: ").append(required).append("\n");
     sb.append("  multiple: ").append(multiple).append("\n");
     sb.append("  allowed_values: ").append(allowedValues).append("\n");
-    sb.append("  context: ").append(context).append("\n");
+    sb.append("  description: ").append(description).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

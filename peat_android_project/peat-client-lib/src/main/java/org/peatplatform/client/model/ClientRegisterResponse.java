@@ -11,6 +11,9 @@ public class ClientRegisterResponse {
   /* The client's description */
   @JsonProperty("description")
   private String description = null;
+  /* Marks the Client as a Service Enabler. */
+  @JsonProperty("isSE")
+  private Boolean isSE = null;
   /* Developers Cloudlet associated with Client (Used for permissions). */
   @JsonProperty("cloudlet")
   private String cloudlet = null;
@@ -32,6 +35,13 @@ public class ClientRegisterResponse {
   }
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Boolean getIsSE() {
+    return isSE;
+  }
+  public void setIsSE(Boolean isSE) {
+    this.isSE = isSE;
   }
 
   public String getCloudlet() {
@@ -61,6 +71,7 @@ public class ClientRegisterResponse {
     sb.append("class ClientRegisterResponse {\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  description: ").append(description).append("\n");
+    sb.append("  isSE: ").append(isSE).append("\n");
     sb.append("  cloudlet: ").append(cloudlet).append("\n");
     sb.append("  api_key: ").append(apiKey).append("\n");
     sb.append("  secret: ").append(secret).append("\n");
