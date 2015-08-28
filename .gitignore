@@ -1,4 +1,5 @@
-peat-android-sdk-1.0.0.jar
+peat-android-client-lib-1.0.0.jar
+peat-client-lib.aar
 swagger-codegen
 peat_android_project/gradle
 peat_android_project/.gradle
@@ -9,6 +10,8 @@ peat_android_project/peat-client-lib/src/main/java/org/peatplatform/client/commo
 peat_android_project/peat-client-lib/src/main/java/org/peatplatform/client/model
 peat_android_project/peat-client-lib/src/main/java/org/peatplatform/client/utils
 peat_android_project/peat-client-lib/src/main/gen/
+peat_android_project/peat-client-lib/build/
+scala-2.11.6.deb*
 .idea
 .DS_Store
 .gitignore
