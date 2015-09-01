@@ -10,9 +10,12 @@ sudo apt-get install -y scala
 sudo apt-get -f install
 sudo apt-get install scala
 
-echo "deb http://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
 sudo apt-get update -y
 sudo apt-get install -y sbt
+
+wget -P /home/vagrant/.sbt/launchers/0.13.0/ https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.0/sbt-launch.jar
 
 rm -fr scala-2.10.3.deb
 
